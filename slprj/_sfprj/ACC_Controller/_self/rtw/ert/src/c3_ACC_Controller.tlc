@@ -1,0 +1,54 @@
+%implements "chartSource" "C"
+%function ChartConfig(block, system) void
+  %createrecord chartConfiguration { ...
+          executeAtInitialization  0 ...
+  }
+  %return chartConfiguration
+%endfunction
+%function ChartDataMap(block, system) void
+  %createrecord ChartDataElements {\
+    NumChartData   6 \
+    ChartDataDefaults {\
+      RecordType   "ChartData"\
+      Dimensions   []\
+      IsTestPoint  0\
+    }\
+    ChartData {\
+      Name         "is_active_c3_ACC_Controller"\
+      Description  "StateIsActive"\
+      SFName       ""\
+      Path         ""\
+    }\
+    ChartData {\
+      Name         "is_c3_ACC_Controller"\
+      Description  "StateActiveChild"\
+      SFName       ""\
+      Path         ""\
+    }\
+    ChartData {\
+      Name         "is_ON_STATE"\
+      Description  "StateActiveChild"\
+      SFName       ""\
+      Path         "ON_STATE"\
+    }\
+    ChartData {\
+      Name         "is_WORKING_STATE"\
+      Description  "StateActiveChild"\
+      SFName       ""\
+      Path         "ON_STATE.WORKING_STATE"\
+    }\
+    ChartData {\
+      Name         "setSpeed"\
+      Description  "ChartLocal"\
+      SFName       ""\
+      Path         "setSpeed"\
+    }\
+    ChartData {\
+      Name         "safety"\
+      Description  "ChartLocal"\
+      SFName       ""\
+      Path         "safety"\
+    }\
+  }
+  %return ChartDataElements
+%endfunction
