@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'ACC_Controller'.
  *
- * Model version                  : 1.16
+ * Model version                  : 1.25
  * Simulink Coder version         : 8.8 (R2015a) 09-Feb-2015
- * C/C++ source code generated on : Tue Jul  7 19:24:08 2015
+ * C/C++ source code generated on : Wed Jul  8 23:07:02 2015
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex

@@ -29,11 +29,11 @@
 <tr name="9" id="9">
 <td>9</td><td><span class="ct"> *</span></td></tr>
 <tr name="10" id="10">
-<td>10</td><td><span class="ct"> * Model version                  : 1.16</span></td></tr>
+<td>10</td><td><span class="ct"> * Model version                  : 1.25</span></td></tr>
 <tr name="11" id="11">
 <td>11</td><td><span class="ct"> * Simulink Coder version         : 8.8 (R2015a) 09-Feb-2015</span></td></tr>
 <tr name="12" id="12">
-<td>12</td><td><span class="ct"> * C/C++ source code generated on : Tue Jul  7 19:24:08 2015</span></td></tr>
+<td>12</td><td><span class="ct"> * C/C++ source code generated on : Wed Jul  8 23:07:02 2015</span></td></tr>
 <tr name="13" id="13">
 <td>13</td><td><span class="ct"> *</span></td></tr>
 <tr name="14" id="14">
@@ -71,651 +71,953 @@
 <tr name="30" id="30">
 <td>30</td><td><span class="pp">#define</span> <a id="30c9" class="tk">ACC_Controller_IN_STOP_STATE</a>   ((<a id="30c42" class="tk">uint8_T</a>)2U)</td></tr>
 <tr name="31" id="31">
-<td>31</td><td><span class="pp">#define</span> <a id="31c9" class="tk">ACC_Controller_IN_WORKING_STATE</a> ((<a id="31c43" class="tk">uint8_T</a>)3U)</td></tr>
+<td>31</td><td><span class="pp">#define</span> <a id="31c9" class="tk">ACC_Controller_IN_WAIT</a>         ((<a id="31c42" class="tk">uint8_T</a>)3U)</td></tr>
 <tr name="32" id="32">
-<td>32</td><td></td></tr>
+<td>32</td><td><span class="pp">#define</span> <a id="32c9" class="tk">ACC_Controller_IN_WORKING_STATE</a> ((<a id="32c43" class="tk">uint8_T</a>)4U)</td></tr>
 <tr name="33" id="33">
-<td>33</td><td><span class="ct">/*===========*</span></td></tr>
+<td>33</td><td></td></tr>
 <tr name="34" id="34">
-<td>34</td><td><span class="ct"> * Constants *</span></td></tr>
+<td>34</td><td><span class="ct">/* Forward declaration for local functions */</span></td></tr>
 <tr name="35" id="35">
-<td>35</td><td><span class="ct"> *===========*/</span></td></tr>
+<td>35</td><td><span class="kw">static</span> <span class="kw">void</span> <a id="35c13" class="tk">ACC_Controller_ON_STATE</a>(<span class="kw">const</span> <a id="35c43" class="tk">real_T</a> *<a id="35c51" class="tk">Divide</a>, <a id="35c59" class="tk">uint8_T</a></td></tr>
 <tr name="36" id="36">
-<td>36</td><td><span class="pp">#define</span> <a id="36c9" class="tk">RT_PI</a>                          3.14159265358979323846</td></tr>
+<td>36</td><td>  <a id="36c3" class="tk">ACC_Controller_U_EnableSwitch</a>, <a id="36c34" class="tk">uint8_T</a> <a id="36c42" class="tk">ACC_Controller_U_PedalFlag</a>, <a id="36c70" class="tk">uint8_T</a></td></tr>
 <tr name="37" id="37">
-<td>37</td><td><span class="pp">#define</span> <a id="37c9" class="tk">RT_PIF</a>                         3.1415927F</td></tr>
+<td>37</td><td>  *<a id="37c4" class="tk">ACC_Controller_Y_Led1</a>, <a id="37c27" class="tk">uint8_T</a> *<a id="37c36" class="tk">ACC_Controller_Y_Go</a>, <a id="37c57" class="tk">uint8_T</a></td></tr>
 <tr name="38" id="38">
-<td>38</td><td><span class="pp">#define</span> <a id="38c9" class="tk">RT_LN_10</a>                       2.30258509299404568402</td></tr>
+<td>38</td><td>  *<a id="38c4" class="tk">ACC_Controller_Y_Stop</a>, <a id="38c27" class="tk">real_T</a> *<a id="38c35" class="tk">ACC_Controller_Y_d</a>, <a id="38c55" class="tk">DW_ACC_Controller_T</a></td></tr>
 <tr name="39" id="39">
-<td>39</td><td><span class="pp">#define</span> <a id="39c9" class="tk">RT_LN_10F</a>                      2.3025851F</td></tr>
+<td>39</td><td>  *<a id="39c4" class="tk">ACC_Controller_DW</a>);</td></tr>
 <tr name="40" id="40">
-<td>40</td><td><span class="pp">#define</span> <a id="40c9" class="tk">RT_LOG10E</a>                      0.43429448190325182765</td></tr>
+<td>40</td><td></td></tr>
 <tr name="41" id="41">
-<td>41</td><td><span class="pp">#define</span> <a id="41c9" class="tk">RT_LOG10EF</a>                     0.43429449F</td></tr>
+<td>41</td><td><span class="ct">/*===========*</span></td></tr>
 <tr name="42" id="42">
-<td>42</td><td><span class="pp">#define</span> <a id="42c9" class="tk">RT_E</a>                           2.7182818284590452354</td></tr>
+<td>42</td><td><span class="ct"> * Constants *</span></td></tr>
 <tr name="43" id="43">
-<td>43</td><td><span class="pp">#define</span> <a id="43c9" class="tk">RT_EF</a>                          2.7182817F</td></tr>
+<td>43</td><td><span class="ct"> *===========*/</span></td></tr>
 <tr name="44" id="44">
-<td>44</td><td></td></tr>
+<td>44</td><td><span class="pp">#define</span> <a id="44c9" class="tk">RT_PI</a>                          3.14159265358979323846</td></tr>
 <tr name="45" id="45">
-<td>45</td><td><span class="ct">/*</span></td></tr>
+<td>45</td><td><span class="pp">#define</span> <a id="45c9" class="tk">RT_PIF</a>                         3.1415927F</td></tr>
 <tr name="46" id="46">
-<td>46</td><td><span class="ct"> * UNUSED_PARAMETER(x)</span></td></tr>
+<td>46</td><td><span class="pp">#define</span> <a id="46c9" class="tk">RT_LN_10</a>                       2.30258509299404568402</td></tr>
 <tr name="47" id="47">
-<td>47</td><td><span class="ct"> *   Used to specify that a function parameter (argument) is required but not</span></td></tr>
+<td>47</td><td><span class="pp">#define</span> <a id="47c9" class="tk">RT_LN_10F</a>                      2.3025851F</td></tr>
 <tr name="48" id="48">
-<td>48</td><td><span class="ct"> *   accessed by the function body.</span></td></tr>
+<td>48</td><td><span class="pp">#define</span> <a id="48c9" class="tk">RT_LOG10E</a>                      0.43429448190325182765</td></tr>
 <tr name="49" id="49">
-<td>49</td><td><span class="ct"> */</span></td></tr>
+<td>49</td><td><span class="pp">#define</span> <a id="49c9" class="tk">RT_LOG10EF</a>                     0.43429449F</td></tr>
 <tr name="50" id="50">
-<td>50</td><td><span class="pp">#ifndef</span> <a id="50c9" class="tk">UNUSED_PARAMETER</a></td></tr>
+<td>50</td><td><span class="pp">#define</span> <a id="50c9" class="tk">RT_E</a>                           2.7182818284590452354</td></tr>
 <tr name="51" id="51">
-<td>51</td><td><span class="pp"># if</span> <a id="51c6" class="tk">defined</a>(<a id="51c14" class="tk">__LCC__</a>)</td></tr>
+<td>51</td><td><span class="pp">#define</span> <a id="51c9" class="tk">RT_EF</a>                          2.7182817F</td></tr>
 <tr name="52" id="52">
-<td>52</td><td><span class="pp">#   define</span> <a id="52c12" class="tk">UNUSED_PARAMETER</a>(<a id="52c29" class="tk">x</a>)                                   <span class="ct">/* do nothing */</span></td></tr>
+<td>52</td><td></td></tr>
 <tr name="53" id="53">
-<td>53</td><td><span class="pp"># else</span></td></tr>
+<td>53</td><td><span class="ct">/*</span></td></tr>
 <tr name="54" id="54">
-<td>54</td><td></td></tr>
+<td>54</td><td><span class="ct"> * UNUSED_PARAMETER(x)</span></td></tr>
 <tr name="55" id="55">
-<td>55</td><td><span class="ct">/*</span></td></tr>
+<td>55</td><td><span class="ct"> *   Used to specify that a function parameter (argument) is required but not</span></td></tr>
 <tr name="56" id="56">
-<td>56</td><td><span class="ct"> * This is the semi-ANSI standard way of indicating that an</span></td></tr>
+<td>56</td><td><span class="ct"> *   accessed by the function body.</span></td></tr>
 <tr name="57" id="57">
-<td>57</td><td><span class="ct"> * unused function parameter is required.</span></td></tr>
+<td>57</td><td><span class="ct"> */</span></td></tr>
 <tr name="58" id="58">
-<td>58</td><td><span class="ct"> */</span></td></tr>
+<td>58</td><td><span class="pp">#ifndef</span> <a id="58c9" class="tk">UNUSED_PARAMETER</a></td></tr>
 <tr name="59" id="59">
-<td>59</td><td><span class="pp">#   define</span> <a id="59c12" class="tk">UNUSED_PARAMETER</a>(<a id="59c29" class="tk">x</a>)         (<span class="kw">void</span>) (<a id="59c48" class="tk">x</a>)</td></tr>
+<td>59</td><td><span class="pp"># if</span> <a id="59c6" class="tk">defined</a>(<a id="59c14" class="tk">__LCC__</a>)</td></tr>
 <tr name="60" id="60">
-<td>60</td><td><span class="pp"># endif</span></td></tr>
+<td>60</td><td><span class="pp">#   define</span> <a id="60c12" class="tk">UNUSED_PARAMETER</a>(<a id="60c29" class="tk">x</a>)                                   <span class="ct">/* do nothing */</span></td></tr>
 <tr name="61" id="61">
-<td>61</td><td><span class="pp">#endif</span></td></tr>
+<td>61</td><td><span class="pp"># else</span></td></tr>
 <tr name="62" id="62">
 <td>62</td><td></td></tr>
 <tr name="63" id="63">
-<td>63</td><td><span class="ct">/* Model step function */</span></td></tr>
+<td>63</td><td><span class="ct">/*</span></td></tr>
 <tr name="64" id="64">
-<td>64</td><td><span class="kw">void</span> <a id="64c6" class="tk">ACC_Controller_step</a>(<a id="64c26" class="tk">RT_MODEL_ACC_Controller_T</a> *<span class="kw">const</span> <a id="64c59" class="tk">ACC_Controller_M</a>,</td></tr>
+<td>64</td><td><span class="ct"> * This is the semi-ANSI standard way of indicating that an</span></td></tr>
 <tr name="65" id="65">
-<td>65</td><td>  <a id="65c3" class="tk">uint8_T</a> <a id="65c11" class="tk">ACC_Controller_U_EnableSwitch</a>, <a id="65c42" class="tk">uint8_T</a> <a id="65c50" class="tk">ACC_Controller_U_PedalFlag</a>,</td></tr>
+<td>65</td><td><span class="ct"> * unused function parameter is required.</span></td></tr>
 <tr name="66" id="66">
-<td>66</td><td>  <a id="66c3" class="tk">uint8_T</a> <a id="66c11" class="tk">ACC_Controller_U_ResetSwitch</a>, <a id="66c41" class="tk">real_T</a> <a id="66c48" class="tk">ACC_Controller_U_Speed</a>, <a id="66c72" class="tk">real_T</a></td></tr>
+<td>66</td><td><span class="ct"> */</span></td></tr>
 <tr name="67" id="67">
-<td>67</td><td>  <a id="67c3" class="tk">ACC_Controller_U_Distance</a>, <a id="67c30" class="tk">uint8_T</a> *<a id="67c39" class="tk">ACC_Controller_Y_Led1</a>, <a id="67c62" class="tk">uint8_T</a></td></tr>
+<td>67</td><td><span class="pp">#   define</span> <a id="67c12" class="tk">UNUSED_PARAMETER</a>(<a id="67c29" class="tk">x</a>)         (<span class="kw">void</span>) (<a id="67c48" class="tk">x</a>)</td></tr>
 <tr name="68" id="68">
-<td>68</td><td>  *<a id="68c4" class="tk">ACC_Controller_Y_Go</a>, <a id="68c25" class="tk">uint8_T</a> *<a id="68c34" class="tk">ACC_Controller_Y_Stop</a>)</td></tr>
+<td>68</td><td><span class="pp"># endif</span></td></tr>
 <tr name="69" id="69">
-<td>69</td><td><span class="br">{</span></td></tr>
+<td>69</td><td><span class="pp">#endif</span></td></tr>
 <tr name="70" id="70">
-<td>70</td><td>  <a id="70c3" class="tk">DW_ACC_Controller_T</a> *<a id="70c24" class="tk">ACC_Controller_DW</a> = ((<a id="70c46" class="tk">DW_ACC_Controller_T</a> *)</td></tr>
+<td>70</td><td></td></tr>
 <tr name="71" id="71">
-<td>71</td><td>    <a id="71c5" class="tk">ACC_Controller_M</a>-&gt;<a id="71c23" class="tk">ModelData</a>.<a id="71c33" class="tk">dwork</a>);</td></tr>
+<td>71</td><td><span class="ct">/* Function for Chart: '<a class="ct blk" blk_line="71">&lt;S1&gt;/controller</a>' */</span></td></tr>
 <tr name="72" id="72">
-<td>72</td><td>  <a id="72c3" class="tk">real_T</a> <a id="72c10" class="tk">y</a>;</td></tr>
+<td>72</td><td><span class="kw">static</span> <span class="kw">void</span> <a id="72c13" class="tk">ACC_Controller_ON_STATE</a>(<span class="kw">const</span> <a id="72c43" class="tk">real_T</a> *<a id="72c51" class="tk">Divide</a>, <a id="72c59" class="tk">uint8_T</a></td></tr>
 <tr name="73" id="73">
-<td>73</td><td></td></tr>
+<td>73</td><td>  <a id="73c3" class="tk">ACC_Controller_U_EnableSwitch</a>, <a id="73c34" class="tk">uint8_T</a> <a id="73c42" class="tk">ACC_Controller_U_PedalFlag</a>, <a id="73c70" class="tk">uint8_T</a></td></tr>
 <tr name="74" id="74">
-<td>74</td><td>  <span class="ct">/* Chart: '<a class="ct blk" blk_line="74">&lt;S1&gt;/controller</a>' incorporates:</span></td></tr>
+<td>74</td><td>  *<a id="74c4" class="tk">ACC_Controller_Y_Led1</a>, <a id="74c27" class="tk">uint8_T</a> *<a id="74c36" class="tk">ACC_Controller_Y_Go</a>, <a id="74c57" class="tk">uint8_T</a></td></tr>
 <tr name="75" id="75">
-<td>75</td><td><span class="ct">   *  Inport: '<a class="ct blk" blk_line="75">&lt;Root&gt;/Distance</a>'</span></td></tr>
+<td>75</td><td>  *<a id="75c4" class="tk">ACC_Controller_Y_Stop</a>, <a id="75c27" class="tk">real_T</a> *<a id="75c35" class="tk">ACC_Controller_Y_d</a>, <a id="75c55" class="tk">DW_ACC_Controller_T</a></td></tr>
 <tr name="76" id="76">
-<td>76</td><td><span class="ct">   *  Inport: '<a class="ct blk" blk_line="76">&lt;Root&gt;/EnableSwitch</a>'</span></td></tr>
+<td>76</td><td>  *<a id="76c4" class="tk">ACC_Controller_DW</a>)</td></tr>
 <tr name="77" id="77">
-<td>77</td><td><span class="ct">   *  Inport: '<a class="ct blk" blk_line="77">&lt;Root&gt;/PedalFlag</a>'</span></td></tr>
+<td>77</td><td><span class="br">{</span></td></tr>
 <tr name="78" id="78">
-<td>78</td><td><span class="ct">   *  Inport: '<a class="ct blk" blk_line="78">&lt;Root&gt;/ResetSwitch</a>'</span></td></tr>
+<td>78</td><td>  <span class="ct">/* Inport: '<a class="ct blk" blk_line="78">&lt;Root&gt;/EnableSwitch</a>' incorporates:</span></td></tr>
 <tr name="79" id="79">
-<td>79</td><td><span class="ct">   *  Inport: '<a class="ct blk" blk_line="79">&lt;Root&gt;/Speed</a>'</span></td></tr>
+<td>79</td><td><span class="ct">   *  Inport: '<a class="ct blk" blk_line="79">&lt;Root&gt;/PedalFlag</a>'</span></td></tr>
 <tr name="80" id="80">
 <td>80</td><td><span class="ct">   */</span></td></tr>
 <tr name="81" id="81">
-<td>81</td><td>  <span class="ct">/* Gateway: ACC_Controller/controller */</span></td></tr>
+<td>81</td><td>  <span class="ct">/* During 'ON_STATE': '<a class="ct blk" blk_line="81">&lt;S5&gt;:3</a>' */</span></td></tr>
 <tr name="82" id="82">
-<td>82</td><td>  <span class="ct">/* During: ACC_Controller/controller */</span></td></tr>
+<td>82</td><td>  <span class="kw">if</span> (<a id="82c7" class="tk">ACC_Controller_U_EnableSwitch</a> == 0) <span class="br">{</span></td></tr>
 <tr name="83" id="83">
-<td>83</td><td>  <span class="kw">if</span> (<a id="83c7" class="tk">ACC_Controller_DW</a>-&gt;<a id="83c26" class="tk">is_active_c3_ACC_Controller</a> == 0U) <span class="br">{</span></td></tr>
+<td>83</td><td>    <span class="ct">/* Transition: '<a class="ct blk" blk_line="83">&lt;S5&gt;:7</a>' */</span></td></tr>
 <tr name="84" id="84">
-<td>84</td><td>    <span class="ct">/* Entry: ACC_Controller/controller */</span></td></tr>
+<td>84</td><td>    <span class="ct">/* Exit Internal 'ON_STATE': '<a class="ct blk" blk_line="84">&lt;S5&gt;:3</a>' */</span></td></tr>
 <tr name="85" id="85">
-<td>85</td><td>    <a id="85c5" class="tk">ACC_Controller_DW</a>-&gt;<a id="85c24" class="tk">is_active_c3_ACC_Controller</a> = 1U;</td></tr>
+<td>85</td><td>    <a id="85c5" class="tk">ACC_Controller_DW</a>-&gt;<a id="85c24" class="tk">is_ON_STATE</a> = <a id="85c38" class="tk">ACC_Controll_IN_NO_ACTIVE_CHILD</a>;</td></tr>
 <tr name="86" id="86">
 <td>86</td><td></td></tr>
 <tr name="87" id="87">
-<td>87</td><td>    <span class="ct">/* Entry Internal: ACC_Controller/controller */</span></td></tr>
+<td>87</td><td>    <span class="ct">/* Exit Internal 'WORKING_STATE': '<a class="ct blk" blk_line="87">&lt;S5&gt;:39</a>' */</span></td></tr>
 <tr name="88" id="88">
-<td>88</td><td>    <span class="ct">/* Transition: '<a class="ct blk" blk_line="88">&lt;S2&gt;:2</a>' */</span></td></tr>
+<td>88</td><td>    <a id="88c5" class="tk">ACC_Controller_DW</a>-&gt;<a id="88c24" class="tk">is_WORKING_STATE</a> = <a id="88c43" class="tk">ACC_Controll_IN_NO_ACTIVE_CHILD</a>;</td></tr>
 <tr name="89" id="89">
 <td>89</td><td>    <a id="89c5" class="tk">ACC_Controller_DW</a>-&gt;<a id="89c24" class="tk">is_c3_ACC_Controller</a> = <a id="89c47" class="tk">ACC_Controller_IN_OFF_STATE</a>;</td></tr>
 <tr name="90" id="90">
 <td>90</td><td></td></tr>
 <tr name="91" id="91">
-<td>91</td><td>    <span class="ct">/* Outport: '<a class="ct blk" blk_line="91">&lt;Root&gt;/Led1</a>' */</span></td></tr>
+<td>91</td><td>    <span class="ct">/* Entry 'OFF_STATE': '<a class="ct blk" blk_line="91">&lt;S5&gt;:1</a>' */</span></td></tr>
 <tr name="92" id="92">
-<td>92</td><td>    <span class="ct">/* Entry 'OFF_STATE': '<a class="ct blk" blk_line="92">&lt;S2&gt;:1</a>' */</span></td></tr>
+<td>92</td><td>    *<a id="92c6" class="tk">ACC_Controller_Y_Led1</a> = 0U;</td></tr>
 <tr name="93" id="93">
-<td>93</td><td>    *<a id="93c6" class="tk">ACC_Controller_Y_Led1</a> = 0U;</td></tr>
+<td>93</td><td>  <span class="br">}</span> <span class="kw">else</span> <span class="kw">if</span> (<a id="93c14" class="tk">ACC_Controller_U_PedalFlag</a> == 1) <span class="br">{</span></td></tr>
 <tr name="94" id="94">
-<td>94</td><td>  <span class="br">}</span> <span class="kw">else</span> <span class="br">{</span></td></tr>
+<td>94</td><td>    <span class="ct">/* Transition: '<a class="ct blk" blk_line="94">&lt;S5&gt;:13</a>' */</span></td></tr>
 <tr name="95" id="95">
-<td>95</td><td>    <span class="kw">switch</span> (<a id="95c13" class="tk">ACC_Controller_DW</a>-&gt;<a id="95c32" class="tk">is_c3_ACC_Controller</a>) <span class="br">{</span></td></tr>
+<td>95</td><td>    <span class="ct">/* Exit Internal 'ON_STATE': '<a class="ct blk" blk_line="95">&lt;S5&gt;:3</a>' */</span></td></tr>
 <tr name="96" id="96">
-<td>96</td><td>     <span class="kw">case</span> <a id="96c11" class="tk">ACC_Controller_IN_OFF_STATE</a>:</td></tr>
+<td>96</td><td>    <a id="96c5" class="tk">ACC_Controller_DW</a>-&gt;<a id="96c24" class="tk">is_ON_STATE</a> = <a id="96c38" class="tk">ACC_Controll_IN_NO_ACTIVE_CHILD</a>;</td></tr>
 <tr name="97" id="97">
-<td>97</td><td>      <span class="ct">/* During 'OFF_STATE': '<a class="ct blk" blk_line="97">&lt;S2&gt;:1</a>' */</span></td></tr>
+<td>97</td><td></td></tr>
 <tr name="98" id="98">
-<td>98</td><td>      <span class="kw">if</span> ((<a id="98c12" class="tk">ACC_Controller_U_PedalFlag</a> == 0) &amp;&amp; (<a id="98c49" class="tk">ACC_Controller_U_EnableSwitch</a> ==</td></tr>
+<td>98</td><td>    <span class="ct">/* Exit Internal 'WORKING_STATE': '<a class="ct blk" blk_line="98">&lt;S5&gt;:39</a>' */</span></td></tr>
 <tr name="99" id="99">
-<td>99</td><td>           1)) <span class="br">{</span></td></tr>
+<td>99</td><td>    <a id="99c5" class="tk">ACC_Controller_DW</a>-&gt;<a id="99c24" class="tk">is_WORKING_STATE</a> = <a id="99c43" class="tk">ACC_Controll_IN_NO_ACTIVE_CHILD</a>;</td></tr>
 <tr name="100" id="100">
-<td>100</td><td>        <span class="ct">/* Transition: '<a class="ct blk" blk_line="100">&lt;S2&gt;:6</a>' */</span></td></tr>
+<td>100</td><td>    <a id="100c5" class="tk">ACC_Controller_DW</a>-&gt;<a id="100c24" class="tk">is_c3_ACC_Controller</a> = <a id="100c47" class="tk">ACC_Control_IN_OVERRIDDEN_STATE</a>;</td></tr>
 <tr name="101" id="101">
-<td>101</td><td>        <a id="101c9" class="tk">ACC_Controller_DW</a>-&gt;<a id="101c28" class="tk">is_c3_ACC_Controller</a> = <a id="101c51" class="tk">ACC_Controller_IN_ON_STATE</a>;</td></tr>
+<td>101</td><td></td></tr>
 <tr name="102" id="102">
-<td>102</td><td></td></tr>
+<td>102</td><td>    <span class="ct">/* Entry 'OVERRIDDEN_STATE': '<a class="ct blk" blk_line="102">&lt;S5&gt;:11</a>' */</span></td></tr>
 <tr name="103" id="103">
-<td>103</td><td>        <span class="ct">/* Entry Internal 'ON_STATE': '<a class="ct blk" blk_line="103">&lt;S2&gt;:3</a>' */</span></td></tr>
+<td>103</td><td>    *<a id="103c6" class="tk">ACC_Controller_Y_Led1</a> = 2U;</td></tr>
 <tr name="104" id="104">
-<td>104</td><td>        <span class="ct">/* Transition: '<a class="ct blk" blk_line="104">&lt;S2&gt;:43</a>' */</span></td></tr>
+<td>104</td><td>  <span class="br">}</span> <span class="kw">else</span> <span class="br">{</span></td></tr>
 <tr name="105" id="105">
-<td>105</td><td>        <a id="105c9" class="tk">ACC_Controller_DW</a>-&gt;<a id="105c28" class="tk">is_ON_STATE</a> = <a id="105c42" class="tk">ACC_Controller_IN_INIT_ON</a>;</td></tr>
+<td>105</td><td>    <span class="kw">switch</span> (<a id="105c13" class="tk">ACC_Controller_DW</a>-&gt;<a id="105c32" class="tk">is_ON_STATE</a>) <span class="br">{</span></td></tr>
 <tr name="106" id="106">
-<td>106</td><td></td></tr>
+<td>106</td><td>     <span class="kw">case</span> <a id="106c11" class="tk">ACC_Controller_IN_IDLE_STATE</a>:</td></tr>
 <tr name="107" id="107">
-<td>107</td><td>        <span class="ct">/* Outport: '<a class="ct blk" blk_line="107">&lt;Root&gt;/Led1</a>' */</span></td></tr>
+<td>107</td><td>      <span class="ct">/* During 'IDLE_STATE': '<a class="ct blk" blk_line="107">&lt;S5&gt;:17</a>' */</span></td></tr>
 <tr name="108" id="108">
-<td>108</td><td>        <span class="ct">/* Entry 'INIT_ON': '<a class="ct blk" blk_line="108">&lt;S2&gt;:41</a>' */</span></td></tr>
+<td>108</td><td>      <span class="kw">if</span> ((*<a id="108c13" class="tk">Divide</a> &lt;= 0.0) || (*<a id="108c33" class="tk">Divide</a> &gt; 250.0)) <span class="br">{</span></td></tr>
 <tr name="109" id="109">
-<td>109</td><td>        *<a id="109c10" class="tk">ACC_Controller_Y_Led1</a> = 1U;</td></tr>
+<td>109</td><td>        <span class="ct">/* Transition: '<a class="ct blk" blk_line="109">&lt;S5&gt;:33</a>' */</span></td></tr>
 <tr name="110" id="110">
-<td>110</td><td>        <a id="110c9" class="tk">ACC_Controller_DW</a>-&gt;<a id="110c28" class="tk">setSpeed</a> = <a id="110c39" class="tk">ACC_Controller_U_Speed</a>;</td></tr>
+<td>110</td><td>        <a id="110c9" class="tk">ACC_Controller_DW</a>-&gt;<a id="110c28" class="tk">is_ON_STATE</a> = <a id="110c42" class="tk">ACC_Controller_IN_IDLE_STATE</a>;</td></tr>
 <tr name="111" id="111">
-<td>111</td><td>        <a id="111c9" class="tk">y</a> = <a id="111c13" class="tk">ACC_Controller_U_Speed</a> / 10.0;</td></tr>
+<td>111</td><td></td></tr>
 <tr name="112" id="112">
-<td>112</td><td>        <a id="112c9" class="tk">ACC_Controller_DW</a>-&gt;<a id="112c28" class="tk">safety</a> = <a id="112c37" class="tk">y</a> * <a id="112c41" class="tk">y</a>;</td></tr>
+<td>112</td><td>        <span class="ct">/* Entry 'IDLE_STATE': '<a class="ct blk" blk_line="112">&lt;S5&gt;:17</a>' */</span></td></tr>
 <tr name="113" id="113">
-<td>113</td><td>      <span class="br">}</span></td></tr>
+<td>113</td><td>        *<a id="113c10" class="tk">ACC_Controller_Y_Go</a> = 0U;</td></tr>
 <tr name="114" id="114">
-<td>114</td><td>      <span class="kw">break</span>;</td></tr>
+<td>114</td><td>        *<a id="114c10" class="tk">ACC_Controller_Y_Stop</a> = 0U;</td></tr>
 <tr name="115" id="115">
-<td>115</td><td></td></tr>
+<td>115</td><td>      <span class="br">}</span> <span class="kw">else</span> <span class="kw">if</span> ((*<a id="115c20" class="tk">ACC_Controller_Y_d</a> &lt; 0.0) || (*<a id="115c51" class="tk">Divide</a> &gt;</td></tr>
 <tr name="116" id="116">
-<td>116</td><td>     <span class="kw">case</span> <a id="116c11" class="tk">ACC_Controller_IN_ON_STATE</a>:</td></tr>
+<td>116</td><td>                  <a id="116c19" class="tk">ACC_Controller_DW</a>-&gt;<a id="116c38" class="tk">setSpeed</a>)) <span class="br">{</span></td></tr>
 <tr name="117" id="117">
-<td>117</td><td>      <span class="ct">/* During 'ON_STATE': '<a class="ct blk" blk_line="117">&lt;S2&gt;:3</a>' */</span></td></tr>
+<td>117</td><td>        <span class="ct">/* Transition: '<a class="ct blk" blk_line="117">&lt;S5&gt;:24</a>' */</span></td></tr>
 <tr name="118" id="118">
-<td>118</td><td>      <span class="kw">if</span> (<a id="118c11" class="tk">ACC_Controller_U_EnableSwitch</a> == 0) <span class="br">{</span></td></tr>
+<td>118</td><td>        <a id="118c9" class="tk">ACC_Controller_DW</a>-&gt;<a id="118c28" class="tk">is_ON_STATE</a> = <a id="118c42" class="tk">ACC_Controller_IN_WORKING_STATE</a>;</td></tr>
 <tr name="119" id="119">
-<td>119</td><td>        <span class="ct">/* Transition: '<a class="ct blk" blk_line="119">&lt;S2&gt;:7</a>' */</span></td></tr>
+<td>119</td><td>        <a id="119c9" class="tk">ACC_Controller_DW</a>-&gt;<a id="119c28" class="tk">is_WORKING_STATE</a> = <a id="119c47" class="tk">ACC_Controller_IN_STOP_STATE</a>;</td></tr>
 <tr name="120" id="120">
-<td>120</td><td>        <span class="ct">/* Exit Internal 'ON_STATE': '<a class="ct blk" blk_line="120">&lt;S2&gt;:3</a>' */</span></td></tr>
+<td>120</td><td></td></tr>
 <tr name="121" id="121">
-<td>121</td><td>        <a id="121c9" class="tk">ACC_Controller_DW</a>-&gt;<a id="121c28" class="tk">is_ON_STATE</a> = <a id="121c42" class="tk">ACC_Controll_IN_NO_ACTIVE_CHILD</a>;</td></tr>
+<td>121</td><td>        <span class="ct">/* Entry 'STOP_STATE': '<a class="ct blk" blk_line="121">&lt;S5&gt;:20</a>' */</span></td></tr>
 <tr name="122" id="122">
-<td>122</td><td></td></tr>
+<td>122</td><td>        *<a id="122c10" class="tk">ACC_Controller_Y_Go</a> = 0U;</td></tr>
 <tr name="123" id="123">
-<td>123</td><td>        <span class="ct">/* Exit Internal 'WORKING_STATE': '<a class="ct blk" blk_line="123">&lt;S2&gt;:39</a>' */</span></td></tr>
+<td>123</td><td>        *<a id="123c10" class="tk">ACC_Controller_Y_Stop</a> = 1U;</td></tr>
 <tr name="124" id="124">
-<td>124</td><td>        <a id="124c9" class="tk">ACC_Controller_DW</a>-&gt;<a id="124c28" class="tk">is_WORKING_STATE</a> = <a id="124c47" class="tk">ACC_Controll_IN_NO_ACTIVE_CHILD</a>;</td></tr>
+<td>124</td><td>      <span class="br">}</span> <span class="kw">else</span> <span class="br">{</span></td></tr>
 <tr name="125" id="125">
-<td>125</td><td>        <a id="125c9" class="tk">ACC_Controller_DW</a>-&gt;<a id="125c28" class="tk">is_c3_ACC_Controller</a> = <a id="125c51" class="tk">ACC_Controller_IN_OFF_STATE</a>;</td></tr>
+<td>125</td><td>        <span class="kw">if</span> ((*<a id="125c15" class="tk">ACC_Controller_Y_d</a> &gt; 0.0) &amp;&amp; (*<a id="125c46" class="tk">Divide</a> &lt;</td></tr>
 <tr name="126" id="126">
-<td>126</td><td></td></tr>
+<td>126</td><td>             <a id="126c14" class="tk">ACC_Controller_DW</a>-&gt;<a id="126c33" class="tk">setSpeed</a>)) <span class="br">{</span></td></tr>
 <tr name="127" id="127">
-<td>127</td><td>        <span class="ct">/* Outport: '<a class="ct blk" blk_line="127">&lt;Root&gt;/Led1</a>' */</span></td></tr>
+<td>127</td><td>          <span class="ct">/* Transition: '<a class="ct blk" blk_line="127">&lt;S5&gt;:45</a>' */</span></td></tr>
 <tr name="128" id="128">
-<td>128</td><td>        <span class="ct">/* Entry 'OFF_STATE': '<a class="ct blk" blk_line="128">&lt;S2&gt;:1</a>' */</span></td></tr>
+<td>128</td><td>          <a id="128c11" class="tk">ACC_Controller_DW</a>-&gt;<a id="128c30" class="tk">is_ON_STATE</a> = <a id="128c44" class="tk">ACC_Controller_IN_WORKING_STATE</a>;</td></tr>
 <tr name="129" id="129">
-<td>129</td><td>        *<a id="129c10" class="tk">ACC_Controller_Y_Led1</a> = 0U;</td></tr>
+<td>129</td><td>          <a id="129c11" class="tk">ACC_Controller_DW</a>-&gt;<a id="129c30" class="tk">is_WORKING_STATE</a> = <a id="129c49" class="tk">ACC_Controller_IN_GO_STATE</a>;</td></tr>
 <tr name="130" id="130">
-<td>130</td><td>      <span class="br">}</span> <span class="kw">else</span> <span class="kw">if</span> (<a id="130c18" class="tk">ACC_Controller_U_PedalFlag</a> == 1) <span class="br">{</span></td></tr>
+<td>130</td><td></td></tr>
 <tr name="131" id="131">
-<td>131</td><td>        <span class="ct">/* Transition: '<a class="ct blk" blk_line="131">&lt;S2&gt;:13</a>' */</span></td></tr>
+<td>131</td><td>          <span class="ct">/* Entry 'GO_STATE': '<a class="ct blk" blk_line="131">&lt;S5&gt;:19</a>' */</span></td></tr>
 <tr name="132" id="132">
-<td>132</td><td>        <span class="ct">/* Exit Internal 'ON_STATE': '<a class="ct blk" blk_line="132">&lt;S2&gt;:3</a>' */</span></td></tr>
+<td>132</td><td>          *<a id="132c12" class="tk">ACC_Controller_Y_Go</a> = 1U;</td></tr>
 <tr name="133" id="133">
-<td>133</td><td>        <a id="133c9" class="tk">ACC_Controller_DW</a>-&gt;<a id="133c28" class="tk">is_ON_STATE</a> = <a id="133c42" class="tk">ACC_Controll_IN_NO_ACTIVE_CHILD</a>;</td></tr>
+<td>133</td><td>          *<a id="133c12" class="tk">ACC_Controller_Y_Stop</a> = 0U;</td></tr>
 <tr name="134" id="134">
-<td>134</td><td></td></tr>
+<td>134</td><td>        <span class="br">}</span></td></tr>
 <tr name="135" id="135">
-<td>135</td><td>        <span class="ct">/* Exit Internal 'WORKING_STATE': '<a class="ct blk" blk_line="135">&lt;S2&gt;:39</a>' */</span></td></tr>
+<td>135</td><td>      <span class="br">}</span></td></tr>
 <tr name="136" id="136">
-<td>136</td><td>        <a id="136c9" class="tk">ACC_Controller_DW</a>-&gt;<a id="136c28" class="tk">is_WORKING_STATE</a> = <a id="136c47" class="tk">ACC_Controll_IN_NO_ACTIVE_CHILD</a>;</td></tr>
+<td>136</td><td>      <span class="kw">break</span>;</td></tr>
 <tr name="137" id="137">
-<td>137</td><td>        <a id="137c9" class="tk">ACC_Controller_DW</a>-&gt;<a id="137c28" class="tk">is_c3_ACC_Controller</a> =</td></tr>
+<td>137</td><td></td></tr>
 <tr name="138" id="138">
-<td>138</td><td>          <a id="138c11" class="tk">ACC_Control_IN_OVERRIDDEN_STATE</a>;</td></tr>
+<td>138</td><td>     <span class="kw">case</span> <a id="138c11" class="tk">ACC_Controller_IN_INIT_ON</a>:</td></tr>
 <tr name="139" id="139">
-<td>139</td><td></td></tr>
+<td>139</td><td>      <span class="ct">/* During 'INIT_ON': '<a class="ct blk" blk_line="139">&lt;S5&gt;:47</a>' */</span></td></tr>
 <tr name="140" id="140">
-<td>140</td><td>        <span class="ct">/* Outport: '<a class="ct blk" blk_line="140">&lt;Root&gt;/Led1</a>' */</span></td></tr>
+<td>140</td><td>      <span class="ct">/* Transition: '<a class="ct blk" blk_line="140">&lt;S5&gt;:48</a>' */</span></td></tr>
 <tr name="141" id="141">
-<td>141</td><td>        <span class="ct">/* Entry 'OVERRIDDEN_STATE': '<a class="ct blk" blk_line="141">&lt;S2&gt;:11</a>' */</span></td></tr>
+<td>141</td><td>      <a id="141c7" class="tk">ACC_Controller_DW</a>-&gt;<a id="141c26" class="tk">is_ON_STATE</a> = <a id="141c40" class="tk">ACC_Controller_IN_IDLE_STATE</a>;</td></tr>
 <tr name="142" id="142">
-<td>142</td><td>        *<a id="142c10" class="tk">ACC_Controller_Y_Led1</a> = 2U;</td></tr>
+<td>142</td><td></td></tr>
 <tr name="143" id="143">
-<td>143</td><td>      <span class="br">}</span> <span class="kw">else</span> <span class="br">{</span></td></tr>
+<td>143</td><td>      <span class="ct">/* Entry 'IDLE_STATE': '<a class="ct blk" blk_line="143">&lt;S5&gt;:17</a>' */</span></td></tr>
 <tr name="144" id="144">
-<td>144</td><td>        <span class="kw">switch</span> (<a id="144c17" class="tk">ACC_Controller_DW</a>-&gt;<a id="144c36" class="tk">is_ON_STATE</a>) <span class="br">{</span></td></tr>
+<td>144</td><td>      *<a id="144c8" class="tk">ACC_Controller_Y_Go</a> = 0U;</td></tr>
 <tr name="145" id="145">
-<td>145</td><td>         <span class="kw">case</span> <a id="145c15" class="tk">ACC_Controller_IN_IDLE_STATE</a>:</td></tr>
+<td>145</td><td>      *<a id="145c8" class="tk">ACC_Controller_Y_Stop</a> = 0U;</td></tr>
 <tr name="146" id="146">
-<td>146</td><td>          <span class="ct">/* During 'IDLE_STATE': '<a class="ct blk" blk_line="146">&lt;S2&gt;:17</a>' */</span></td></tr>
+<td>146</td><td>      <span class="kw">break</span>;</td></tr>
 <tr name="147" id="147">
-<td>147</td><td>          <span class="kw">if</span> ((<a id="147c16" class="tk">ACC_Controller_U_Speed</a> &lt;= 0.0) || (<a id="147c51" class="tk">ACC_Controller_U_Distance</a> ==</td></tr>
+<td>147</td><td></td></tr>
 <tr name="148" id="148">
-<td>148</td><td>               <a id="148c16" class="tk">ACC_Controller_DW</a>-&gt;<a id="148c35" class="tk">safety</a>)) <span class="br">{</span></td></tr>
+<td>148</td><td>     <span class="kw">case</span> <a id="148c11" class="tk">ACC_Controller_IN_WAIT</a>:</td></tr>
 <tr name="149" id="149">
-<td>149</td><td>            <span class="ct">/* Transition: '<a class="ct blk" blk_line="149">&lt;S2&gt;:33</a>' */</span></td></tr>
+<td>149</td><td>      <span class="ct">/* During 'WAIT': '<a class="ct blk" blk_line="149">&lt;S5&gt;:41</a>' */</span></td></tr>
 <tr name="150" id="150">
-<td>150</td><td>            <a id="150c13" class="tk">ACC_Controller_DW</a>-&gt;<a id="150c32" class="tk">is_ON_STATE</a> = <a id="150c46" class="tk">ACC_Controller_IN_IDLE_STATE</a>;</td></tr>
+<td>150</td><td>      <span class="kw">if</span> (<a id="150c11" class="tk">ACC_Controller_DW</a>-&gt;<a id="150c30" class="tk">temporalCounter_i1</a> &gt;= 4) <span class="br">{</span></td></tr>
 <tr name="151" id="151">
-<td>151</td><td></td></tr>
+<td>151</td><td>        <span class="ct">/* Transition: '<a class="ct blk" blk_line="151">&lt;S5&gt;:42</a>' */</span></td></tr>
 <tr name="152" id="152">
-<td>152</td><td>            <span class="ct">/* Outport: '<a class="ct blk" blk_line="152">&lt;Root&gt;/Go</a>' */</span></td></tr>
+<td>152</td><td>        <a id="152c9" class="tk">ACC_Controller_DW</a>-&gt;<a id="152c28" class="tk">is_ON_STATE</a> = <a id="152c42" class="tk">ACC_Controller_IN_INIT_ON</a>;</td></tr>
 <tr name="153" id="153">
-<td>153</td><td>            <span class="ct">/* Entry 'IDLE_STATE': '<a class="ct blk" blk_line="153">&lt;S2&gt;:17</a>' */</span></td></tr>
+<td>153</td><td></td></tr>
 <tr name="154" id="154">
-<td>154</td><td>            *<a id="154c14" class="tk">ACC_Controller_Y_Go</a> = 0U;</td></tr>
+<td>154</td><td>        <span class="ct">/* Entry 'INIT_ON': '<a class="ct blk" blk_line="154">&lt;S5&gt;:47</a>' */</span></td></tr>
 <tr name="155" id="155">
-<td>155</td><td></td></tr>
+<td>155</td><td>        *<a id="155c10" class="tk">ACC_Controller_Y_Led1</a> = 1U;</td></tr>
 <tr name="156" id="156">
-<td>156</td><td>            <span class="ct">/* Outport: '<a class="ct blk" blk_line="156">&lt;Root&gt;/Stop</a>' */</span></td></tr>
+<td>156</td><td>        <a id="156c9" class="tk">ACC_Controller_DW</a>-&gt;<a id="156c28" class="tk">setSpeed</a> = *<a id="156c40" class="tk">Divide</a>;</td></tr>
 <tr name="157" id="157">
-<td>157</td><td>            *<a id="157c14" class="tk">ACC_Controller_Y_Stop</a> = 0U;</td></tr>
+<td>157</td><td>      <span class="br">}</span></td></tr>
 <tr name="158" id="158">
-<td>158</td><td>            <a id="158c13" class="tk">y</a> = <a id="158c17" class="tk">ACC_Controller_U_Speed</a> / 10.0;</td></tr>
+<td>158</td><td>      <span class="kw">break</span>;</td></tr>
 <tr name="159" id="159">
-<td>159</td><td>            <a id="159c13" class="tk">ACC_Controller_DW</a>-&gt;<a id="159c32" class="tk">safety</a> = <a id="159c41" class="tk">y</a> * <a id="159c45" class="tk">y</a>;</td></tr>
+<td>159</td><td></td></tr>
 <tr name="160" id="160">
-<td>160</td><td>          <span class="br">}</span> <span class="kw">else</span> <span class="kw">if</span> (<a id="160c22" class="tk">ACC_Controller_U_Distance</a> &lt; <a id="160c50" class="tk">ACC_Controller_DW</a>-&gt;<a id="160c69" class="tk">safety</a>) <span class="br">{</span></td></tr>
+<td>160</td><td>     <span class="kw">default</span>:</td></tr>
 <tr name="161" id="161">
-<td>161</td><td>            <span class="ct">/* Transition: '<a class="ct blk" blk_line="161">&lt;S2&gt;:24</a>' */</span></td></tr>
+<td>161</td><td>      <span class="ct">/* During 'WORKING_STATE': '<a class="ct blk" blk_line="161">&lt;S5&gt;:39</a>' */</span></td></tr>
 <tr name="162" id="162">
-<td>162</td><td>            <a id="162c13" class="tk">ACC_Controller_DW</a>-&gt;<a id="162c32" class="tk">is_ON_STATE</a> = <a id="162c46" class="tk">ACC_Controller_IN_WORKING_STATE</a>;</td></tr>
+<td>162</td><td>      <span class="kw">if</span> ((*<a id="162c13" class="tk">Divide</a> &lt;= 0.0) || (*<a id="162c33" class="tk">Divide</a> &gt; 250.0)) <span class="br">{</span></td></tr>
 <tr name="163" id="163">
-<td>163</td><td>            <a id="163c13" class="tk">ACC_Controller_DW</a>-&gt;<a id="163c32" class="tk">is_WORKING_STATE</a> = <a id="163c51" class="tk">ACC_Controller_IN_STOP_STATE</a>;</td></tr>
+<td>163</td><td>        <span class="ct">/* Transition: '<a class="ct blk" blk_line="163">&lt;S5&gt;:40</a>' */</span></td></tr>
 <tr name="164" id="164">
-<td>164</td><td></td></tr>
+<td>164</td><td>        <span class="ct">/* Exit Internal 'WORKING_STATE': '<a class="ct blk" blk_line="164">&lt;S5&gt;:39</a>' */</span></td></tr>
 <tr name="165" id="165">
-<td>165</td><td>            <span class="ct">/* Outport: '<a class="ct blk" blk_line="165">&lt;Root&gt;/Go</a>' */</span></td></tr>
+<td>165</td><td>        <a id="165c9" class="tk">ACC_Controller_DW</a>-&gt;<a id="165c28" class="tk">is_WORKING_STATE</a> = <a id="165c47" class="tk">ACC_Controll_IN_NO_ACTIVE_CHILD</a>;</td></tr>
 <tr name="166" id="166">
-<td>166</td><td>            <span class="ct">/* Entry 'STOP_STATE': '<a class="ct blk" blk_line="166">&lt;S2&gt;:20</a>' */</span></td></tr>
+<td>166</td><td>        <a id="166c9" class="tk">ACC_Controller_DW</a>-&gt;<a id="166c28" class="tk">is_ON_STATE</a> = <a id="166c42" class="tk">ACC_Controller_IN_IDLE_STATE</a>;</td></tr>
 <tr name="167" id="167">
-<td>167</td><td>            *<a id="167c14" class="tk">ACC_Controller_Y_Go</a> = 0U;</td></tr>
+<td>167</td><td></td></tr>
 <tr name="168" id="168">
-<td>168</td><td></td></tr>
+<td>168</td><td>        <span class="ct">/* Entry 'IDLE_STATE': '<a class="ct blk" blk_line="168">&lt;S5&gt;:17</a>' */</span></td></tr>
 <tr name="169" id="169">
-<td>169</td><td>            <span class="ct">/* Outport: '<a class="ct blk" blk_line="169">&lt;Root&gt;/Stop</a>' */</span></td></tr>
+<td>169</td><td>        *<a id="169c10" class="tk">ACC_Controller_Y_Go</a> = 0U;</td></tr>
 <tr name="170" id="170">
-<td>170</td><td>            *<a id="170c14" class="tk">ACC_Controller_Y_Stop</a> = 1U;</td></tr>
+<td>170</td><td>        *<a id="170c10" class="tk">ACC_Controller_Y_Stop</a> = 0U;</td></tr>
 <tr name="171" id="171">
-<td>171</td><td>            <a id="171c13" class="tk">y</a> = <a id="171c17" class="tk">ACC_Controller_U_Speed</a> / 10.0;</td></tr>
+<td>171</td><td>      <span class="br">}</span> <span class="kw">else</span> <span class="kw">if</span> (<a id="171c18" class="tk">ACC_Controller_DW</a>-&gt;<a id="171c37" class="tk">is_WORKING_STATE</a> ==</td></tr>
 <tr name="172" id="172">
-<td>172</td><td>            <a id="172c13" class="tk">ACC_Controller_DW</a>-&gt;<a id="172c32" class="tk">safety</a> = <a id="172c41" class="tk">y</a> * <a id="172c45" class="tk">y</a>;</td></tr>
+<td>172</td><td>                 <a id="172c18" class="tk">ACC_Controller_IN_GO_STATE</a>) <span class="br">{</span></td></tr>
 <tr name="173" id="173">
-<td>173</td><td>          <span class="br">}</span> <span class="kw">else</span> <span class="kw">if</span> ((<a id="173c23" class="tk">ACC_Controller_U_Distance</a> &gt; <a id="173c51" class="tk">ACC_Controller_DW</a>-&gt;<a id="173c70" class="tk">safety</a>) &amp;&amp;</td></tr>
+<td>173</td><td>        <span class="ct">/* During 'GO_STATE': '<a class="ct blk" blk_line="173">&lt;S5&gt;:19</a>' */</span></td></tr>
 <tr name="174" id="174">
-<td>174</td><td>                     (<a id="174c23" class="tk">ACC_Controller_U_Speed</a> &lt; <a id="174c48" class="tk">ACC_Controller_DW</a>-&gt;<a id="174c67" class="tk">setSpeed</a>)) <span class="br">{</span></td></tr>
+<td>174</td><td>        <span class="kw">if</span> ((*<a id="174c15" class="tk">ACC_Controller_Y_d</a> &lt; 0.0) || (*<a id="174c46" class="tk">Divide</a> &gt;</td></tr>
 <tr name="175" id="175">
-<td>175</td><td>            <span class="ct">/* Transition: '<a class="ct blk" blk_line="175">&lt;S2&gt;:45</a>' */</span></td></tr>
+<td>175</td><td>             <a id="175c14" class="tk">ACC_Controller_DW</a>-&gt;<a id="175c33" class="tk">setSpeed</a>)) <span class="br">{</span></td></tr>
 <tr name="176" id="176">
-<td>176</td><td>            <a id="176c13" class="tk">ACC_Controller_DW</a>-&gt;<a id="176c32" class="tk">is_ON_STATE</a> = <a id="176c46" class="tk">ACC_Controller_IN_WORKING_STATE</a>;</td></tr>
+<td>176</td><td>          <span class="ct">/* Transition: '<a class="ct blk" blk_line="176">&lt;S5&gt;:31</a>' */</span></td></tr>
 <tr name="177" id="177">
-<td>177</td><td>            <a id="177c13" class="tk">ACC_Controller_DW</a>-&gt;<a id="177c32" class="tk">is_WORKING_STATE</a> = <a id="177c51" class="tk">ACC_Controller_IN_GO_STATE</a>;</td></tr>
+<td>177</td><td>          <a id="177c11" class="tk">ACC_Controller_DW</a>-&gt;<a id="177c30" class="tk">is_WORKING_STATE</a> = <a id="177c49" class="tk">ACC_Controller_IN_STOP_STATE</a>;</td></tr>
 <tr name="178" id="178">
 <td>178</td><td></td></tr>
 <tr name="179" id="179">
-<td>179</td><td>            <span class="ct">/* Outport: '<a class="ct blk" blk_line="179">&lt;Root&gt;/Go</a>' */</span></td></tr>
+<td>179</td><td>          <span class="ct">/* Entry 'STOP_STATE': '<a class="ct blk" blk_line="179">&lt;S5&gt;:20</a>' */</span></td></tr>
 <tr name="180" id="180">
-<td>180</td><td>            <span class="ct">/* Entry 'GO_STATE': '<a class="ct blk" blk_line="180">&lt;S2&gt;:19</a>' */</span></td></tr>
+<td>180</td><td>          *<a id="180c12" class="tk">ACC_Controller_Y_Go</a> = 0U;</td></tr>
 <tr name="181" id="181">
-<td>181</td><td>            *<a id="181c14" class="tk">ACC_Controller_Y_Go</a> = 1U;</td></tr>
+<td>181</td><td>          *<a id="181c12" class="tk">ACC_Controller_Y_Stop</a> = 1U;</td></tr>
 <tr name="182" id="182">
-<td>182</td><td></td></tr>
+<td>182</td><td>        <span class="br">}</span> <span class="kw">else</span> <span class="br">{</span></td></tr>
 <tr name="183" id="183">
-<td>183</td><td>            <span class="ct">/* Outport: '<a class="ct blk" blk_line="183">&lt;Root&gt;/Stop</a>' */</span></td></tr>
+<td>183</td><td>          <span class="kw">if</span> (((*<a id="183c18" class="tk">ACC_Controller_Y_d</a> == 0.0) &amp;&amp; (*<a id="183c50" class="tk">Divide</a> &lt;=</td></tr>
 <tr name="184" id="184">
-<td>184</td><td>            *<a id="184c14" class="tk">ACC_Controller_Y_Stop</a> = 0U;</td></tr>
+<td>184</td><td>                <a id="184c17" class="tk">ACC_Controller_DW</a>-&gt;<a id="184c36" class="tk">setSpeed</a>)) || ((*<a id="184c53" class="tk">ACC_Controller_Y_d</a> &gt;= 0.0) &amp;&amp;</td></tr>
 <tr name="185" id="185">
-<td>185</td><td>            <a id="185c13" class="tk">y</a> = <a id="185c17" class="tk">ACC_Controller_U_Speed</a> / 10.0;</td></tr>
+<td>185</td><td>               (*<a id="185c18" class="tk">Divide</a> == <a id="185c28" class="tk">ACC_Controller_DW</a>-&gt;<a id="185c47" class="tk">setSpeed</a>))) <span class="br">{</span></td></tr>
 <tr name="186" id="186">
-<td>186</td><td>            <a id="186c13" class="tk">ACC_Controller_DW</a>-&gt;<a id="186c32" class="tk">safety</a> = <a id="186c41" class="tk">y</a> * <a id="186c45" class="tk">y</a>;</td></tr>
+<td>186</td><td>            <span class="ct">/* Transition: '<a class="ct blk" blk_line="186">&lt;S5&gt;:55</a>' */</span></td></tr>
 <tr name="187" id="187">
-<td>187</td><td>          <span class="br">}</span> <span class="kw">else</span> <span class="br">{</span></td></tr>
+<td>187</td><td>            <a id="187c13" class="tk">ACC_Controller_DW</a>-&gt;<a id="187c32" class="tk">is_WORKING_STATE</a> =</td></tr>
 <tr name="188" id="188">
-<td>188</td><td>            <a id="188c13" class="tk">y</a> = <a id="188c17" class="tk">ACC_Controller_U_Speed</a> / 10.0;</td></tr>
+<td>188</td><td>              <a id="188c15" class="tk">ACC_Controll_IN_NO_ACTIVE_CHILD</a>;</td></tr>
 <tr name="189" id="189">
-<td>189</td><td>            <a id="189c13" class="tk">ACC_Controller_DW</a>-&gt;<a id="189c32" class="tk">safety</a> = <a id="189c41" class="tk">y</a> * <a id="189c45" class="tk">y</a>;</td></tr>
+<td>189</td><td>            <a id="189c13" class="tk">ACC_Controller_DW</a>-&gt;<a id="189c32" class="tk">is_ON_STATE</a> = <a id="189c46" class="tk">ACC_Controller_IN_IDLE_STATE</a>;</td></tr>
 <tr name="190" id="190">
-<td>190</td><td>          <span class="br">}</span></td></tr>
+<td>190</td><td></td></tr>
 <tr name="191" id="191">
-<td>191</td><td>          <span class="kw">break</span>;</td></tr>
+<td>191</td><td>            <span class="ct">/* Entry 'IDLE_STATE': '<a class="ct blk" blk_line="191">&lt;S5&gt;:17</a>' */</span></td></tr>
 <tr name="192" id="192">
-<td>192</td><td></td></tr>
+<td>192</td><td>            *<a id="192c14" class="tk">ACC_Controller_Y_Go</a> = 0U;</td></tr>
 <tr name="193" id="193">
-<td>193</td><td>         <span class="kw">case</span> <a id="193c15" class="tk">ACC_Controller_IN_INIT_ON</a>:</td></tr>
+<td>193</td><td>            *<a id="193c14" class="tk">ACC_Controller_Y_Stop</a> = 0U;</td></tr>
 <tr name="194" id="194">
-<td>194</td><td>          <span class="ct">/* During 'INIT_ON': '<a class="ct blk" blk_line="194">&lt;S2&gt;:41</a>' */</span></td></tr>
+<td>194</td><td>          <span class="br">}</span></td></tr>
 <tr name="195" id="195">
-<td>195</td><td>          <span class="ct">/* Transition: '<a class="ct blk" blk_line="195">&lt;S2&gt;:42</a>' */</span></td></tr>
+<td>195</td><td>        <span class="br">}</span></td></tr>
 <tr name="196" id="196">
-<td>196</td><td>          <a id="196c11" class="tk">ACC_Controller_DW</a>-&gt;<a id="196c30" class="tk">is_ON_STATE</a> = <a id="196c44" class="tk">ACC_Controller_IN_IDLE_STATE</a>;</td></tr>
+<td>196</td><td>      <span class="br">}</span> <span class="kw">else</span> <span class="br">{</span></td></tr>
 <tr name="197" id="197">
-<td>197</td><td></td></tr>
+<td>197</td><td>        <span class="ct">/* During 'STOP_STATE': '<a class="ct blk" blk_line="197">&lt;S5&gt;:20</a>' */</span></td></tr>
 <tr name="198" id="198">
-<td>198</td><td>          <span class="ct">/* Outport: '<a class="ct blk" blk_line="198">&lt;Root&gt;/Go</a>' */</span></td></tr>
+<td>198</td><td>        <span class="kw">if</span> ((*<a id="198c15" class="tk">ACC_Controller_Y_d</a> &gt; 0.0) &amp;&amp; (*<a id="198c46" class="tk">Divide</a> &lt;</td></tr>
 <tr name="199" id="199">
-<td>199</td><td>          <span class="ct">/* Entry 'IDLE_STATE': '<a class="ct blk" blk_line="199">&lt;S2&gt;:17</a>' */</span></td></tr>
+<td>199</td><td>             <a id="199c14" class="tk">ACC_Controller_DW</a>-&gt;<a id="199c33" class="tk">setSpeed</a>)) <span class="br">{</span></td></tr>
 <tr name="200" id="200">
-<td>200</td><td>          *<a id="200c12" class="tk">ACC_Controller_Y_Go</a> = 0U;</td></tr>
+<td>200</td><td>          <span class="ct">/* Transition: '<a class="ct blk" blk_line="200">&lt;S5&gt;:32</a>' */</span></td></tr>
 <tr name="201" id="201">
-<td>201</td><td></td></tr>
+<td>201</td><td>          <a id="201c11" class="tk">ACC_Controller_DW</a>-&gt;<a id="201c30" class="tk">is_WORKING_STATE</a> = <a id="201c49" class="tk">ACC_Controller_IN_GO_STATE</a>;</td></tr>
 <tr name="202" id="202">
-<td>202</td><td>          <span class="ct">/* Outport: '<a class="ct blk" blk_line="202">&lt;Root&gt;/Stop</a>' */</span></td></tr>
+<td>202</td><td></td></tr>
 <tr name="203" id="203">
-<td>203</td><td>          *<a id="203c12" class="tk">ACC_Controller_Y_Stop</a> = 0U;</td></tr>
+<td>203</td><td>          <span class="ct">/* Entry 'GO_STATE': '<a class="ct blk" blk_line="203">&lt;S5&gt;:19</a>' */</span></td></tr>
 <tr name="204" id="204">
-<td>204</td><td>          <a id="204c11" class="tk">y</a> = <a id="204c15" class="tk">ACC_Controller_U_Speed</a> / 10.0;</td></tr>
+<td>204</td><td>          *<a id="204c12" class="tk">ACC_Controller_Y_Go</a> = 1U;</td></tr>
 <tr name="205" id="205">
-<td>205</td><td>          <a id="205c11" class="tk">ACC_Controller_DW</a>-&gt;<a id="205c30" class="tk">safety</a> = <a id="205c39" class="tk">y</a> * <a id="205c43" class="tk">y</a>;</td></tr>
+<td>205</td><td>          *<a id="205c12" class="tk">ACC_Controller_Y_Stop</a> = 0U;</td></tr>
 <tr name="206" id="206">
-<td>206</td><td>          <span class="kw">break</span>;</td></tr>
+<td>206</td><td>        <span class="br">}</span> <span class="kw">else</span> <span class="br">{</span></td></tr>
 <tr name="207" id="207">
-<td>207</td><td></td></tr>
+<td>207</td><td>          <span class="kw">if</span> (((*<a id="207c18" class="tk">ACC_Controller_Y_d</a> == 0.0) &amp;&amp; (*<a id="207c50" class="tk">Divide</a> &lt;=</td></tr>
 <tr name="208" id="208">
-<td>208</td><td>         <span class="kw">default</span>:</td></tr>
+<td>208</td><td>                <a id="208c17" class="tk">ACC_Controller_DW</a>-&gt;<a id="208c36" class="tk">setSpeed</a>)) || ((*<a id="208c53" class="tk">ACC_Controller_Y_d</a> &gt;= 0.0) &amp;&amp;</td></tr>
 <tr name="209" id="209">
-<td>209</td><td>          <span class="ct">/* During 'WORKING_STATE': '<a class="ct blk" blk_line="209">&lt;S2&gt;:39</a>' */</span></td></tr>
+<td>209</td><td>               (*<a id="209c18" class="tk">Divide</a> == <a id="209c28" class="tk">ACC_Controller_DW</a>-&gt;<a id="209c47" class="tk">setSpeed</a>))) <span class="br">{</span></td></tr>
 <tr name="210" id="210">
-<td>210</td><td>          <span class="kw">if</span> ((<a id="210c16" class="tk">ACC_Controller_U_Speed</a> &lt;= 0.0) || (<a id="210c51" class="tk">ACC_Controller_U_Distance</a> ==</td></tr>
+<td>210</td><td>            <span class="ct">/* Transition: '<a class="ct blk" blk_line="210">&lt;S5&gt;:56</a>' */</span></td></tr>
 <tr name="211" id="211">
-<td>211</td><td>               <a id="211c16" class="tk">ACC_Controller_DW</a>-&gt;<a id="211c35" class="tk">safety</a>) || (<a id="211c47" class="tk">ACC_Controller_U_Distance</a> &lt;</td></tr>
+<td>211</td><td>            <a id="211c13" class="tk">ACC_Controller_DW</a>-&gt;<a id="211c32" class="tk">is_WORKING_STATE</a> =</td></tr>
 <tr name="212" id="212">
-<td>212</td><td>               <a id="212c16" class="tk">ACC_Controller_DW</a>-&gt;<a id="212c35" class="tk">safety</a>) || (<a id="212c47" class="tk">ACC_Controller_U_Speed</a> ==</td></tr>
+<td>212</td><td>              <a id="212c15" class="tk">ACC_Controll_IN_NO_ACTIVE_CHILD</a>;</td></tr>
 <tr name="213" id="213">
-<td>213</td><td>               <a id="213c16" class="tk">ACC_Controller_DW</a>-&gt;<a id="213c35" class="tk">setSpeed</a>)) <span class="br">{</span></td></tr>
+<td>213</td><td>            <a id="213c13" class="tk">ACC_Controller_DW</a>-&gt;<a id="213c32" class="tk">is_ON_STATE</a> = <a id="213c46" class="tk">ACC_Controller_IN_IDLE_STATE</a>;</td></tr>
 <tr name="214" id="214">
-<td>214</td><td>            <span class="ct">/* Transition: '<a class="ct blk" blk_line="214">&lt;S2&gt;:40</a>' */</span></td></tr>
+<td>214</td><td></td></tr>
 <tr name="215" id="215">
-<td>215</td><td>            <span class="ct">/* Exit Internal 'WORKING_STATE': '<a class="ct blk" blk_line="215">&lt;S2&gt;:39</a>' */</span></td></tr>
+<td>215</td><td>            <span class="ct">/* Entry 'IDLE_STATE': '<a class="ct blk" blk_line="215">&lt;S5&gt;:17</a>' */</span></td></tr>
 <tr name="216" id="216">
-<td>216</td><td>            <a id="216c13" class="tk">ACC_Controller_DW</a>-&gt;<a id="216c32" class="tk">is_WORKING_STATE</a> =</td></tr>
+<td>216</td><td>            *<a id="216c14" class="tk">ACC_Controller_Y_Go</a> = 0U;</td></tr>
 <tr name="217" id="217">
-<td>217</td><td>              <a id="217c15" class="tk">ACC_Controll_IN_NO_ACTIVE_CHILD</a>;</td></tr>
+<td>217</td><td>            *<a id="217c14" class="tk">ACC_Controller_Y_Stop</a> = 0U;</td></tr>
 <tr name="218" id="218">
-<td>218</td><td>            <a id="218c13" class="tk">ACC_Controller_DW</a>-&gt;<a id="218c32" class="tk">is_ON_STATE</a> = <a id="218c46" class="tk">ACC_Controller_IN_IDLE_STATE</a>;</td></tr>
+<td>218</td><td>          <span class="br">}</span></td></tr>
 <tr name="219" id="219">
-<td>219</td><td></td></tr>
+<td>219</td><td>        <span class="br">}</span></td></tr>
 <tr name="220" id="220">
-<td>220</td><td>            <span class="ct">/* Outport: '<a class="ct blk" blk_line="220">&lt;Root&gt;/Go</a>' */</span></td></tr>
+<td>220</td><td>      <span class="br">}</span></td></tr>
 <tr name="221" id="221">
-<td>221</td><td>            <span class="ct">/* Entry 'IDLE_STATE': '<a class="ct blk" blk_line="221">&lt;S2&gt;:17</a>' */</span></td></tr>
+<td>221</td><td>      <span class="kw">break</span>;</td></tr>
 <tr name="222" id="222">
-<td>222</td><td>            *<a id="222c14" class="tk">ACC_Controller_Y_Go</a> = 0U;</td></tr>
+<td>222</td><td>    <span class="br">}</span></td></tr>
 <tr name="223" id="223">
-<td>223</td><td></td></tr>
+<td>223</td><td>  <span class="br">}</span></td></tr>
 <tr name="224" id="224">
-<td>224</td><td>            <span class="ct">/* Outport: '<a class="ct blk" blk_line="224">&lt;Root&gt;/Stop</a>' */</span></td></tr>
+<td>224</td><td></td></tr>
 <tr name="225" id="225">
-<td>225</td><td>            *<a id="225c14" class="tk">ACC_Controller_Y_Stop</a> = 0U;</td></tr>
+<td>225</td><td>  <span class="ct">/* End of Inport: '<a class="ct blk" blk_line="225">&lt;Root&gt;/EnableSwitch</a>' */</span></td></tr>
 <tr name="226" id="226">
-<td>226</td><td>            <a id="226c13" class="tk">y</a> = <a id="226c17" class="tk">ACC_Controller_U_Speed</a> / 10.0;</td></tr>
+<td>226</td><td><span class="br">}</span></td></tr>
 <tr name="227" id="227">
-<td>227</td><td>            <a id="227c13" class="tk">ACC_Controller_DW</a>-&gt;<a id="227c32" class="tk">safety</a> = <a id="227c41" class="tk">y</a> * <a id="227c45" class="tk">y</a>;</td></tr>
+<td>227</td><td></td></tr>
 <tr name="228" id="228">
-<td>228</td><td>          <span class="br">}</span> <span class="kw">else</span> <span class="kw">if</span> (<a id="228c22" class="tk">ACC_Controller_DW</a>-&gt;<a id="228c41" class="tk">is_WORKING_STATE</a> ==</td></tr>
+<td>228</td><td><span class="ct">/* Model step function */</span></td></tr>
 <tr name="229" id="229">
-<td>229</td><td>                     <a id="229c22" class="tk">ACC_Controller_IN_GO_STATE</a>) <span class="br">{</span></td></tr>
+<td>229</td><td><span class="kw">void</span> <a id="229c6" class="tk">ACC_Controller_step</a>(<a id="229c26" class="tk">RT_MODEL_ACC_Controller_T</a> *<span class="kw">const</span> <a id="229c59" class="tk">ACC_Controller_M</a>,</td></tr>
 <tr name="230" id="230">
-<td>230</td><td>            <span class="ct">/* During 'GO_STATE': '<a class="ct blk" blk_line="230">&lt;S2&gt;:19</a>' */</span></td></tr>
+<td>230</td><td>  <a id="230c3" class="tk">uint8_T</a> <a id="230c11" class="tk">ACC_Controller_U_EnableSwitch</a>, <a id="230c42" class="tk">uint8_T</a> <a id="230c50" class="tk">ACC_Controller_U_PedalFlag</a>,</td></tr>
 <tr name="231" id="231">
-<td>231</td><td>            <span class="kw">if</span> ((<a id="231c18" class="tk">ACC_Controller_U_Distance</a> &lt; <a id="231c46" class="tk">ACC_Controller_DW</a>-&gt;<a id="231c65" class="tk">safety</a>) ||</td></tr>
+<td>231</td><td>  <a id="231c3" class="tk">uint8_T</a> <a id="231c11" class="tk">ACC_Controller_U_ResetSwitch</a>, <a id="231c41" class="tk">real_T</a> <a id="231c48" class="tk">ACC_Controller_U_Speed</a>, <a id="231c72" class="tk">real_T</a></td></tr>
 <tr name="232" id="232">
-<td>232</td><td>                (<a id="232c18" class="tk">ACC_Controller_U_Speed</a> &gt; <a id="232c43" class="tk">ACC_Controller_DW</a>-&gt;<a id="232c62" class="tk">setSpeed</a>)) <span class="br">{</span></td></tr>
+<td>232</td><td>  <a id="232c3" class="tk">ACC_Controller_U_Distance</a>, <a id="232c30" class="tk">uint8_T</a> *<a id="232c39" class="tk">ACC_Controller_Y_Led1</a>, <a id="232c62" class="tk">uint8_T</a></td></tr>
 <tr name="233" id="233">
-<td>233</td><td>              <span class="ct">/* Transition: '<a class="ct blk" blk_line="233">&lt;S2&gt;:31</a>' */</span></td></tr>
+<td>233</td><td>  *<a id="233c4" class="tk">ACC_Controller_Y_Go</a>, <a id="233c25" class="tk">uint8_T</a> *<a id="233c34" class="tk">ACC_Controller_Y_Stop</a>, <a id="233c57" class="tk">real_T</a></td></tr>
 <tr name="234" id="234">
-<td>234</td><td>              <a id="234c15" class="tk">ACC_Controller_DW</a>-&gt;<a id="234c34" class="tk">is_WORKING_STATE</a> = <a id="234c53" class="tk">ACC_Controller_IN_STOP_STATE</a>;</td></tr>
+<td>234</td><td>  *<a id="234c4" class="tk">ACC_Controller_Y_d</a>)</td></tr>
 <tr name="235" id="235">
-<td>235</td><td></td></tr>
+<td>235</td><td><span class="br">{</span></td></tr>
 <tr name="236" id="236">
-<td>236</td><td>              <span class="ct">/* Outport: '<a class="ct blk" blk_line="236">&lt;Root&gt;/Go</a>' */</span></td></tr>
+<td>236</td><td>  <a id="236c3" class="tk">P_ACC_Controller_T</a> *<a id="236c23" class="tk">ACC_Controller_P</a> = ((<a id="236c44" class="tk">P_ACC_Controller_T</a> *)</td></tr>
 <tr name="237" id="237">
-<td>237</td><td>              <span class="ct">/* Entry 'STOP_STATE': '<a class="ct blk" blk_line="237">&lt;S2&gt;:20</a>' */</span></td></tr>
+<td>237</td><td>    <a id="237c5" class="tk">ACC_Controller_M</a>-&gt;<a id="237c23" class="tk">ModelData</a>.<a id="237c33" class="tk">defaultParam</a>);</td></tr>
 <tr name="238" id="238">
-<td>238</td><td>              *<a id="238c16" class="tk">ACC_Controller_Y_Go</a> = 0U;</td></tr>
+<td>238</td><td>  <a id="238c3" class="tk">DW_ACC_Controller_T</a> *<a id="238c24" class="tk">ACC_Controller_DW</a> = ((<a id="238c46" class="tk">DW_ACC_Controller_T</a> *)</td></tr>
 <tr name="239" id="239">
-<td>239</td><td></td></tr>
+<td>239</td><td>    <a id="239c5" class="tk">ACC_Controller_M</a>-&gt;<a id="239c23" class="tk">ModelData</a>.<a id="239c33" class="tk">dwork</a>);</td></tr>
 <tr name="240" id="240">
-<td>240</td><td>              <span class="ct">/* Outport: '<a class="ct blk" blk_line="240">&lt;Root&gt;/Stop</a>' */</span></td></tr>
+<td>240</td><td>  <a id="240c3" class="tk">real_T</a> <a id="240c10" class="tk">rtb_Delay</a>;</td></tr>
 <tr name="241" id="241">
-<td>241</td><td>              *<a id="241c16" class="tk">ACC_Controller_Y_Stop</a> = 1U;</td></tr>
+<td>241</td><td>  <a id="241c3" class="tk">real_T</a> <a id="241c10" class="tk">rtb_Delay1</a>;</td></tr>
 <tr name="242" id="242">
-<td>242</td><td>              <a id="242c15" class="tk">y</a> = <a id="242c19" class="tk">ACC_Controller_U_Speed</a> / 10.0;</td></tr>
+<td>242</td><td>  <a id="242c3" class="tk">real_T</a> <a id="242c10" class="tk">rtb_Delay2</a>;</td></tr>
 <tr name="243" id="243">
-<td>243</td><td>              <a id="243c15" class="tk">ACC_Controller_DW</a>-&gt;<a id="243c34" class="tk">safety</a> = <a id="243c43" class="tk">y</a> * <a id="243c47" class="tk">y</a>;</td></tr>
+<td>243</td><td>  <a id="243c3" class="tk">real_T</a> <a id="243c10" class="tk">rtb_Sum_d</a>;</td></tr>
 <tr name="244" id="244">
-<td>244</td><td>            <span class="br">}</span> <span class="kw">else</span> <span class="br">{</span></td></tr>
+<td>244</td><td>  <a id="244c3" class="tk">real_T</a> <a id="244c10" class="tk">rtb_Delay_m</a>;</td></tr>
 <tr name="245" id="245">
-<td>245</td><td>              <a id="245c15" class="tk">y</a> = <a id="245c19" class="tk">ACC_Controller_U_Speed</a> / 10.0;</td></tr>
+<td>245</td><td>  <a id="245c3" class="tk">real_T</a> <a id="245c10" class="tk">rtb_Delay1_b</a>;</td></tr>
 <tr name="246" id="246">
-<td>246</td><td>              <a id="246c15" class="tk">ACC_Controller_DW</a>-&gt;<a id="246c34" class="tk">safety</a> = <a id="246c43" class="tk">y</a> * <a id="246c47" class="tk">y</a>;</td></tr>
+<td>246</td><td>  <a id="246c3" class="tk">real_T</a> <a id="246c10" class="tk">rtb_Delay2_o</a>;</td></tr>
 <tr name="247" id="247">
-<td>247</td><td>            <span class="br">}</span></td></tr>
+<td>247</td><td>  <a id="247c3" class="tk">real_T</a> <a id="247c10" class="tk">Divide</a>;</td></tr>
 <tr name="248" id="248">
-<td>248</td><td>          <span class="br">}</span> <span class="kw">else</span> <span class="br">{</span></td></tr>
+<td>248</td><td></td></tr>
 <tr name="249" id="249">
-<td>249</td><td>            <span class="ct">/* During 'STOP_STATE': '<a class="ct blk" blk_line="249">&lt;S2&gt;:20</a>' */</span></td></tr>
+<td>249</td><td>  <span class="ct">/* Delay: '<a class="ct blk" blk_line="249">&lt;S4&gt;/Delay</a>' */</span></td></tr>
 <tr name="250" id="250">
-<td>250</td><td>            <span class="kw">if</span> ((<a id="250c18" class="tk">ACC_Controller_U_Distance</a> &gt; <a id="250c46" class="tk">ACC_Controller_DW</a>-&gt;<a id="250c65" class="tk">safety</a>) &amp;&amp;</td></tr>
+<td>250</td><td>  <a id="250c3" class="tk">rtb_Delay</a> = <a id="250c15" class="tk">ACC_Controller_DW</a>-&gt;<a id="250c34" class="tk">Delay_DSTATE</a>;</td></tr>
 <tr name="251" id="251">
-<td>251</td><td>                (<a id="251c18" class="tk">ACC_Controller_U_Speed</a> &lt; <a id="251c43" class="tk">ACC_Controller_DW</a>-&gt;<a id="251c62" class="tk">setSpeed</a>)) <span class="br">{</span></td></tr>
+<td>251</td><td></td></tr>
 <tr name="252" id="252">
-<td>252</td><td>              <span class="ct">/* Transition: '<a class="ct blk" blk_line="252">&lt;S2&gt;:32</a>' */</span></td></tr>
+<td>252</td><td>  <span class="ct">/* Delay: '<a class="ct blk" blk_line="252">&lt;S4&gt;/Delay1</a>' */</span></td></tr>
 <tr name="253" id="253">
-<td>253</td><td>              <a id="253c15" class="tk">ACC_Controller_DW</a>-&gt;<a id="253c34" class="tk">is_WORKING_STATE</a> = <a id="253c53" class="tk">ACC_Controller_IN_GO_STATE</a>;</td></tr>
+<td>253</td><td>  <a id="253c3" class="tk">rtb_Delay1</a> = <a id="253c16" class="tk">ACC_Controller_DW</a>-&gt;<a id="253c35" class="tk">Delay1_DSTATE</a>;</td></tr>
 <tr name="254" id="254">
 <td>254</td><td></td></tr>
 <tr name="255" id="255">
-<td>255</td><td>              <span class="ct">/* Outport: '<a class="ct blk" blk_line="255">&lt;Root&gt;/Go</a>' */</span></td></tr>
+<td>255</td><td>  <span class="ct">/* Delay: '<a class="ct blk" blk_line="255">&lt;S4&gt;/Delay2</a>' */</span></td></tr>
 <tr name="256" id="256">
-<td>256</td><td>              <span class="ct">/* Entry 'GO_STATE': '<a class="ct blk" blk_line="256">&lt;S2&gt;:19</a>' */</span></td></tr>
+<td>256</td><td>  <a id="256c3" class="tk">rtb_Delay2</a> = <a id="256c16" class="tk">ACC_Controller_DW</a>-&gt;<a id="256c35" class="tk">Delay2_DSTATE</a>;</td></tr>
 <tr name="257" id="257">
-<td>257</td><td>              *<a id="257c16" class="tk">ACC_Controller_Y_Go</a> = 1U;</td></tr>
+<td>257</td><td></td></tr>
 <tr name="258" id="258">
-<td>258</td><td></td></tr>
+<td>258</td><td>  <span class="ct">/* Product: '<a class="ct blk" blk_line="258">&lt;S4&gt;/Divide</a>' incorporates:</span></td></tr>
 <tr name="259" id="259">
-<td>259</td><td>              <span class="ct">/* Outport: '<a class="ct blk" blk_line="259">&lt;Root&gt;/Stop</a>' */</span></td></tr>
+<td>259</td><td><span class="ct">   *  Constant: '<a class="ct blk" blk_line="259">&lt;S4&gt;/Constant</a>'</span></td></tr>
 <tr name="260" id="260">
-<td>260</td><td>              *<a id="260c16" class="tk">ACC_Controller_Y_Stop</a> = 0U;</td></tr>
+<td>260</td><td><span class="ct">   *  Delay: '<a class="ct blk" blk_line="260">&lt;S4&gt;/Delay</a>'</span></td></tr>
 <tr name="261" id="261">
-<td>261</td><td>              <a id="261c15" class="tk">y</a> = <a id="261c19" class="tk">ACC_Controller_U_Speed</a> / 10.0;</td></tr>
+<td>261</td><td><span class="ct">   *  Delay: '<a class="ct blk" blk_line="261">&lt;S4&gt;/Delay1</a>'</span></td></tr>
 <tr name="262" id="262">
-<td>262</td><td>              <a id="262c15" class="tk">ACC_Controller_DW</a>-&gt;<a id="262c34" class="tk">safety</a> = <a id="262c43" class="tk">y</a> * <a id="262c47" class="tk">y</a>;</td></tr>
+<td>262</td><td><span class="ct">   *  Delay: '<a class="ct blk" blk_line="262">&lt;S4&gt;/Delay2</a>'</span></td></tr>
 <tr name="263" id="263">
-<td>263</td><td>            <span class="br">}</span> <span class="kw">else</span> <span class="br">{</span></td></tr>
+<td>263</td><td><span class="ct">   *  Delay: '<a class="ct blk" blk_line="263">&lt;S4&gt;/Delay3</a>'</span></td></tr>
 <tr name="264" id="264">
-<td>264</td><td>              <a id="264c15" class="tk">y</a> = <a id="264c19" class="tk">ACC_Controller_U_Speed</a> / 10.0;</td></tr>
+<td>264</td><td><span class="ct">   *  Inport: '<a class="ct blk" blk_line="264">&lt;Root&gt;/Speed</a>'</span></td></tr>
 <tr name="265" id="265">
-<td>265</td><td>              <a id="265c15" class="tk">ACC_Controller_DW</a>-&gt;<a id="265c34" class="tk">safety</a> = <a id="265c43" class="tk">y</a> * <a id="265c47" class="tk">y</a>;</td></tr>
+<td>265</td><td><span class="ct">   *  Sum: '<a class="ct blk" blk_line="265">&lt;S4&gt;/Sum</a>'</span></td></tr>
 <tr name="266" id="266">
-<td>266</td><td>            <span class="br">}</span></td></tr>
+<td>266</td><td><span class="ct">   *  Sum: '<a class="ct blk" blk_line="266">&lt;S4&gt;/Sum1</a>'</span></td></tr>
 <tr name="267" id="267">
-<td>267</td><td>          <span class="br">}</span></td></tr>
+<td>267</td><td><span class="ct">   *  Sum: '<a class="ct blk" blk_line="267">&lt;S4&gt;/Sum2</a>'</span></td></tr>
 <tr name="268" id="268">
-<td>268</td><td>          <span class="kw">break</span>;</td></tr>
+<td>268</td><td><span class="ct">   *  Sum: '<a class="ct blk" blk_line="268">&lt;S4&gt;/Sum3</a>'</span></td></tr>
 <tr name="269" id="269">
-<td>269</td><td>        <span class="br">}</span></td></tr>
+<td>269</td><td><span class="ct">   */</span></td></tr>
 <tr name="270" id="270">
-<td>270</td><td>      <span class="br">}</span></td></tr>
+<td>270</td><td>  <a id="270c3" class="tk">Divide</a> = ((((<a id="270c16" class="tk">ACC_Controller_U_Speed</a> + <a id="270c41" class="tk">ACC_Controller_DW</a>-&gt;<a id="270c60" class="tk">Delay_DSTATE</a>) +</td></tr>
 <tr name="271" id="271">
-<td>271</td><td>      <span class="kw">break</span>;</td></tr>
+<td>271</td><td>              <a id="271c15" class="tk">ACC_Controller_DW</a>-&gt;<a id="271c34" class="tk">Delay1_DSTATE</a>) +</td></tr>
 <tr name="272" id="272">
-<td>272</td><td></td></tr>
+<td>272</td><td>             <a id="272c14" class="tk">ACC_Controller_DW</a>-&gt;<a id="272c33" class="tk">Delay2_DSTATE</a>) +</td></tr>
 <tr name="273" id="273">
-<td>273</td><td>     <span class="kw">default</span>:</td></tr>
+<td>273</td><td>            <a id="273c13" class="tk">ACC_Controller_DW</a>-&gt;<a id="273c32" class="tk">Delay3_DSTATE</a>) / <a id="273c49" class="tk">ACC_Controller_P</a>-&gt;<a id="273c67" class="tk">Constant_Value</a>;</td></tr>
 <tr name="274" id="274">
-<td>274</td><td>      <span class="ct">/* During 'OVERRIDDEN_STATE': '<a class="ct blk" blk_line="274">&lt;S2&gt;:11</a>' */</span></td></tr>
+<td>274</td><td></td></tr>
 <tr name="275" id="275">
-<td>275</td><td>      <span class="kw">if</span> (<a id="275c11" class="tk">ACC_Controller_U_EnableSwitch</a> == 0) <span class="br">{</span></td></tr>
+<td>275</td><td>  <span class="ct">/* Product: '<a class="ct blk" blk_line="275">&lt;S2&gt;/Divide1</a>' incorporates:</span></td></tr>
 <tr name="276" id="276">
-<td>276</td><td>        <span class="ct">/* Transition: '<a class="ct blk" blk_line="276">&lt;S2&gt;:12</a>' */</span></td></tr>
+<td>276</td><td><span class="ct">   *  Constant: '<a class="ct blk" blk_line="276">&lt;S2&gt;/Constant</a>'</span></td></tr>
 <tr name="277" id="277">
-<td>277</td><td>        <a id="277c9" class="tk">ACC_Controller_DW</a>-&gt;<a id="277c28" class="tk">is_c3_ACC_Controller</a> = <a id="277c51" class="tk">ACC_Controller_IN_OFF_STATE</a>;</td></tr>
+<td>277</td><td><span class="ct">   */</span></td></tr>
 <tr name="278" id="278">
-<td>278</td><td></td></tr>
+<td>278</td><td>  <a id="278c3" class="tk">rtb_Sum_d</a> = <a id="278c15" class="tk">Divide</a> / <a id="278c24" class="tk">ACC_Controller_P</a>-&gt;<a id="278c42" class="tk">Constant_Value_k</a>;</td></tr>
 <tr name="279" id="279">
-<td>279</td><td>        <span class="ct">/* Outport: '<a class="ct blk" blk_line="279">&lt;Root&gt;/Led1</a>' */</span></td></tr>
+<td>279</td><td></td></tr>
 <tr name="280" id="280">
-<td>280</td><td>        <span class="ct">/* Entry 'OFF_STATE': '<a class="ct blk" blk_line="280">&lt;S2&gt;:1</a>' */</span></td></tr>
+<td>280</td><td>  <span class="ct">/* Delay: '<a class="ct blk" blk_line="280">&lt;S3&gt;/Delay</a>' */</span></td></tr>
 <tr name="281" id="281">
-<td>281</td><td>        *<a id="281c10" class="tk">ACC_Controller_Y_Led1</a> = 0U;</td></tr>
+<td>281</td><td>  <a id="281c3" class="tk">rtb_Delay_m</a> = <a id="281c17" class="tk">ACC_Controller_DW</a>-&gt;<a id="281c36" class="tk">Delay_DSTATE_f</a>;</td></tr>
 <tr name="282" id="282">
-<td>282</td><td>      <span class="br">}</span> <span class="kw">else</span> <span class="br">{</span></td></tr>
+<td>282</td><td></td></tr>
 <tr name="283" id="283">
-<td>283</td><td>        <span class="kw">if</span> (<a id="283c13" class="tk">ACC_Controller_U_ResetSwitch</a> == 1) <span class="br">{</span></td></tr>
+<td>283</td><td>  <span class="ct">/* Delay: '<a class="ct blk" blk_line="283">&lt;S3&gt;/Delay1</a>' */</span></td></tr>
 <tr name="284" id="284">
-<td>284</td><td>          <span class="ct">/* Transition: '<a class="ct blk" blk_line="284">&lt;S2&gt;:15</a>' */</span></td></tr>
+<td>284</td><td>  <a id="284c3" class="tk">rtb_Delay1_b</a> = <a id="284c18" class="tk">ACC_Controller_DW</a>-&gt;<a id="284c37" class="tk">Delay1_DSTATE_f</a>;</td></tr>
 <tr name="285" id="285">
-<td>285</td><td>          <a id="285c11" class="tk">ACC_Controller_DW</a>-&gt;<a id="285c30" class="tk">is_c3_ACC_Controller</a> = <a id="285c53" class="tk">ACC_Controller_IN_ON_STATE</a>;</td></tr>
+<td>285</td><td></td></tr>
 <tr name="286" id="286">
-<td>286</td><td></td></tr>
+<td>286</td><td>  <span class="ct">/* Delay: '<a class="ct blk" blk_line="286">&lt;S3&gt;/Delay2</a>' */</span></td></tr>
 <tr name="287" id="287">
-<td>287</td><td>          <span class="ct">/* Entry Internal 'ON_STATE': '<a class="ct blk" blk_line="287">&lt;S2&gt;:3</a>' */</span></td></tr>
+<td>287</td><td>  <a id="287c3" class="tk">rtb_Delay2_o</a> = <a id="287c18" class="tk">ACC_Controller_DW</a>-&gt;<a id="287c37" class="tk">Delay2_DSTATE_h</a>;</td></tr>
 <tr name="288" id="288">
-<td>288</td><td>          <span class="ct">/* Transition: '<a class="ct blk" blk_line="288">&lt;S2&gt;:43</a>' */</span></td></tr>
+<td>288</td><td></td></tr>
 <tr name="289" id="289">
-<td>289</td><td>          <a id="289c11" class="tk">ACC_Controller_DW</a>-&gt;<a id="289c30" class="tk">is_ON_STATE</a> = <a id="289c44" class="tk">ACC_Controller_IN_INIT_ON</a>;</td></tr>
+<td>289</td><td>  <span class="ct">/* Sum: '<a class="ct blk" blk_line="289">&lt;S2&gt;/Sum</a>' incorporates:</span></td></tr>
 <tr name="290" id="290">
-<td>290</td><td></td></tr>
+<td>290</td><td><span class="ct">   *  Constant: '<a class="ct blk" blk_line="290">&lt;S3&gt;/Constant</a>'</span></td></tr>
 <tr name="291" id="291">
-<td>291</td><td>          <span class="ct">/* Outport: '<a class="ct blk" blk_line="291">&lt;Root&gt;/Led1</a>' */</span></td></tr>
+<td>291</td><td><span class="ct">   *  Delay: '<a class="ct blk" blk_line="291">&lt;S3&gt;/Delay</a>'</span></td></tr>
 <tr name="292" id="292">
-<td>292</td><td>          <span class="ct">/* Entry 'INIT_ON': '<a class="ct blk" blk_line="292">&lt;S2&gt;:41</a>' */</span></td></tr>
+<td>292</td><td><span class="ct">   *  Delay: '<a class="ct blk" blk_line="292">&lt;S3&gt;/Delay1</a>'</span></td></tr>
 <tr name="293" id="293">
-<td>293</td><td>          *<a id="293c12" class="tk">ACC_Controller_Y_Led1</a> = 1U;</td></tr>
+<td>293</td><td><span class="ct">   *  Delay: '<a class="ct blk" blk_line="293">&lt;S3&gt;/Delay2</a>'</span></td></tr>
 <tr name="294" id="294">
-<td>294</td><td>          <a id="294c11" class="tk">ACC_Controller_DW</a>-&gt;<a id="294c30" class="tk">setSpeed</a> = <a id="294c41" class="tk">ACC_Controller_U_Speed</a>;</td></tr>
+<td>294</td><td><span class="ct">   *  Delay: '<a class="ct blk" blk_line="294">&lt;S3&gt;/Delay3</a>'</span></td></tr>
 <tr name="295" id="295">
-<td>295</td><td>          <a id="295c11" class="tk">y</a> = <a id="295c15" class="tk">ACC_Controller_U_Speed</a> / 10.0;</td></tr>
+<td>295</td><td><span class="ct">   *  Inport: '<a class="ct blk" blk_line="295">&lt;Root&gt;/Distance</a>'</span></td></tr>
 <tr name="296" id="296">
-<td>296</td><td>          <a id="296c11" class="tk">ACC_Controller_DW</a>-&gt;<a id="296c30" class="tk">safety</a> = <a id="296c39" class="tk">y</a> * <a id="296c43" class="tk">y</a>;</td></tr>
+<td>296</td><td><span class="ct">   *  Product: '<a class="ct blk" blk_line="296">&lt;S2&gt;/Y^2</a>'</span></td></tr>
 <tr name="297" id="297">
-<td>297</td><td>        <span class="br">}</span></td></tr>
+<td>297</td><td><span class="ct">   *  Product: '<a class="ct blk" blk_line="297">&lt;S3&gt;/Divide</a>'</span></td></tr>
 <tr name="298" id="298">
-<td>298</td><td>      <span class="br">}</span></td></tr>
+<td>298</td><td><span class="ct">   *  Sum: '<a class="ct blk" blk_line="298">&lt;S3&gt;/Sum</a>'</span></td></tr>
 <tr name="299" id="299">
-<td>299</td><td>      <span class="kw">break</span>;</td></tr>
+<td>299</td><td><span class="ct">   *  Sum: '<a class="ct blk" blk_line="299">&lt;S3&gt;/Sum1</a>'</span></td></tr>
 <tr name="300" id="300">
-<td>300</td><td>    <span class="br">}</span></td></tr>
+<td>300</td><td><span class="ct">   *  Sum: '<a class="ct blk" blk_line="300">&lt;S3&gt;/Sum2</a>'</span></td></tr>
 <tr name="301" id="301">
-<td>301</td><td>  <span class="br">}</span></td></tr>
+<td>301</td><td><span class="ct">   *  Sum: '<a class="ct blk" blk_line="301">&lt;S3&gt;/Sum3</a>'</span></td></tr>
 <tr name="302" id="302">
-<td>302</td><td></td></tr>
+<td>302</td><td><span class="ct">   */</span></td></tr>
 <tr name="303" id="303">
-<td>303</td><td>  <span class="ct">/* End of Chart: '<a class="ct blk" blk_line="303">&lt;S1&gt;/controller</a>' */</span></td></tr>
+<td>303</td><td>  <a id="303c3" class="tk">rtb_Sum_d</a> = ((((<a id="303c19" class="tk">ACC_Controller_U_Distance</a> + <a id="303c47" class="tk">ACC_Controller_DW</a>-&gt;<a id="303c66" class="tk">Delay_DSTATE_f</a>)</td></tr>
 <tr name="304" id="304">
-<td>304</td><td><span class="br">}</span></td></tr>
+<td>304</td><td>                 + <a id="304c20" class="tk">ACC_Controller_DW</a>-&gt;<a id="304c39" class="tk">Delay1_DSTATE_f</a>) +</td></tr>
 <tr name="305" id="305">
-<td>305</td><td></td></tr>
+<td>305</td><td>                <a id="305c17" class="tk">ACC_Controller_DW</a>-&gt;<a id="305c36" class="tk">Delay2_DSTATE_h</a>) +</td></tr>
 <tr name="306" id="306">
-<td>306</td><td><span class="ct">/* Model initialize function */</span></td></tr>
+<td>306</td><td>               <a id="306c16" class="tk">ACC_Controller_DW</a>-&gt;<a id="306c35" class="tk">Delay3_DSTATE_j</a>) /</td></tr>
 <tr name="307" id="307">
-<td>307</td><td><span class="kw">void</span> <a id="307c6" class="tk">ACC_Controller_initialize</a>(<a id="307c32" class="tk">RT_MODEL_ACC_Controller_T</a> *<span class="kw">const</span> <a id="307c65" class="tk">ACC_Controller_M</a>,</td></tr>
+<td>307</td><td>    <a id="307c5" class="tk">ACC_Controller_P</a>-&gt;<a id="307c23" class="tk">Constant_Value_m</a> - <a id="307c42" class="tk">rtb_Sum_d</a> * <a id="307c54" class="tk">rtb_Sum_d</a>;</td></tr>
 <tr name="308" id="308">
-<td>308</td><td>  <a id="308c3" class="tk">uint8_T</a> *<a id="308c12" class="tk">ACC_Controller_U_EnableSwitch</a>, <a id="308c43" class="tk">uint8_T</a> *<a id="308c52" class="tk">ACC_Controller_U_PedalFlag</a>,</td></tr>
+<td>308</td><td></td></tr>
 <tr name="309" id="309">
-<td>309</td><td>  <a id="309c3" class="tk">uint8_T</a> *<a id="309c12" class="tk">ACC_Controller_U_ResetSwitch</a>, <a id="309c42" class="tk">real_T</a> *<a id="309c50" class="tk">ACC_Controller_U_Speed</a>, <a id="309c74" class="tk">real_T</a> *</td></tr>
+<td>309</td><td>  <span class="ct">/* Signum: '<a class="ct blk" blk_line="309">&lt;S2&gt;/Sign</a>' */</span></td></tr>
 <tr name="310" id="310">
-<td>310</td><td>  <a id="310c3" class="tk">ACC_Controller_U_Distance</a>, <a id="310c30" class="tk">uint8_T</a> *<a id="310c39" class="tk">ACC_Controller_Y_Led1</a>, <a id="310c62" class="tk">uint8_T</a></td></tr>
+<td>310</td><td>  <span class="kw">if</span> (<a id="310c7" class="tk">rtb_Sum_d</a> &lt; 0.0) <span class="br">{</span></td></tr>
 <tr name="311" id="311">
-<td>311</td><td>  *<a id="311c4" class="tk">ACC_Controller_Y_Go</a>, <a id="311c25" class="tk">uint8_T</a> *<a id="311c34" class="tk">ACC_Controller_Y_Stop</a>)</td></tr>
+<td>311</td><td>    <span class="ct">/* Outport: '<a class="ct blk" blk_line="311">&lt;Root&gt;/d</a>' */</span></td></tr>
 <tr name="312" id="312">
-<td>312</td><td><span class="br">{</span></td></tr>
+<td>312</td><td>    *<a id="312c6" class="tk">ACC_Controller_Y_d</a> = -1.0;</td></tr>
 <tr name="313" id="313">
-<td>313</td><td>  <a id="313c3" class="tk">DW_ACC_Controller_T</a> *<a id="313c24" class="tk">ACC_Controller_DW</a> = ((<a id="313c46" class="tk">DW_ACC_Controller_T</a> *)</td></tr>
+<td>313</td><td>  <span class="br">}</span> <span class="kw">else</span> <span class="kw">if</span> (<a id="313c14" class="tk">rtb_Sum_d</a> &gt; 0.0) <span class="br">{</span></td></tr>
 <tr name="314" id="314">
-<td>314</td><td>    <a id="314c5" class="tk">ACC_Controller_M</a>-&gt;<a id="314c23" class="tk">ModelData</a>.<a id="314c33" class="tk">dwork</a>);</td></tr>
+<td>314</td><td>    <span class="ct">/* Outport: '<a class="ct blk" blk_line="314">&lt;Root&gt;/d</a>' */</span></td></tr>
 <tr name="315" id="315">
-<td>315</td><td></td></tr>
+<td>315</td><td>    *<a id="315c6" class="tk">ACC_Controller_Y_d</a> = 1.0;</td></tr>
 <tr name="316" id="316">
-<td>316</td><td>  <span class="ct">/* Registration code */</span></td></tr>
+<td>316</td><td>  <span class="br">}</span> <span class="kw">else</span> <span class="kw">if</span> (<a id="316c14" class="tk">rtb_Sum_d</a> == 0.0) <span class="br">{</span></td></tr>
 <tr name="317" id="317">
-<td>317</td><td></td></tr>
+<td>317</td><td>    <span class="ct">/* Outport: '<a class="ct blk" blk_line="317">&lt;Root&gt;/d</a>' */</span></td></tr>
 <tr name="318" id="318">
-<td>318</td><td>  <span class="ct">/* states (dwork) */</span></td></tr>
+<td>318</td><td>    *<a id="318c6" class="tk">ACC_Controller_Y_d</a> = 0.0;</td></tr>
 <tr name="319" id="319">
-<td>319</td><td>  (<span class="kw">void</span>) <a id="319c10" class="tk">memset</a>((<span class="kw">void</span> *)<a id="319c25" class="tk">ACC_Controller_DW</a>, 0,</td></tr>
+<td>319</td><td>  <span class="br">}</span> <span class="kw">else</span> <span class="br">{</span></td></tr>
 <tr name="320" id="320">
-<td>320</td><td>                <span class="kw">sizeof</span>(<a id="320c24" class="tk">DW_ACC_Controller_T</a>));</td></tr>
+<td>320</td><td>    <span class="ct">/* Outport: '<a class="ct blk" blk_line="320">&lt;Root&gt;/d</a>' */</span></td></tr>
 <tr name="321" id="321">
-<td>321</td><td></td></tr>
+<td>321</td><td>    *<a id="321c6" class="tk">ACC_Controller_Y_d</a> = <a id="321c27" class="tk">rtb_Sum_d</a>;</td></tr>
 <tr name="322" id="322">
-<td>322</td><td>  <span class="ct">/* external inputs */</span></td></tr>
+<td>322</td><td>  <span class="br">}</span></td></tr>
 <tr name="323" id="323">
-<td>323</td><td>  (*<a id="323c5" class="tk">ACC_Controller_U_EnableSwitch</a>) = 0U;</td></tr>
+<td>323</td><td></td></tr>
 <tr name="324" id="324">
-<td>324</td><td>  (*<a id="324c5" class="tk">ACC_Controller_U_PedalFlag</a>) = 0U;</td></tr>
+<td>324</td><td>  <span class="ct">/* End of Signum: '<a class="ct blk" blk_line="324">&lt;S2&gt;/Sign</a>' */</span></td></tr>
 <tr name="325" id="325">
-<td>325</td><td>  (*<a id="325c5" class="tk">ACC_Controller_U_ResetSwitch</a>) = 0U;</td></tr>
+<td>325</td><td></td></tr>
 <tr name="326" id="326">
-<td>326</td><td>  (*<a id="326c5" class="tk">ACC_Controller_U_Speed</a>) = 0.0;</td></tr>
+<td>326</td><td>  <span class="ct">/* Chart: '<a class="ct blk" blk_line="326">&lt;S1&gt;/controller</a>' incorporates:</span></td></tr>
 <tr name="327" id="327">
-<td>327</td><td>  (*<a id="327c5" class="tk">ACC_Controller_U_Distance</a>) = 0.0;</td></tr>
+<td>327</td><td><span class="ct">   *  Inport: '<a class="ct blk" blk_line="327">&lt;Root&gt;/EnableSwitch</a>'</span></td></tr>
 <tr name="328" id="328">
-<td>328</td><td></td></tr>
+<td>328</td><td><span class="ct">   *  Inport: '<a class="ct blk" blk_line="328">&lt;Root&gt;/PedalFlag</a>'</span></td></tr>
 <tr name="329" id="329">
-<td>329</td><td>  <span class="ct">/* external outputs */</span></td></tr>
+<td>329</td><td><span class="ct">   *  Inport: '<a class="ct blk" blk_line="329">&lt;Root&gt;/ResetSwitch</a>'</span></td></tr>
 <tr name="330" id="330">
-<td>330</td><td>  (*<a id="330c5" class="tk">ACC_Controller_Y_Led1</a>) = 0U;</td></tr>
+<td>330</td><td><span class="ct">   */</span></td></tr>
 <tr name="331" id="331">
-<td>331</td><td>  (*<a id="331c5" class="tk">ACC_Controller_Y_Go</a>) = 0U;</td></tr>
+<td>331</td><td>  <span class="ct">/* Gateway: ACC_Controller/controller */</span></td></tr>
 <tr name="332" id="332">
-<td>332</td><td>  (*<a id="332c5" class="tk">ACC_Controller_Y_Stop</a>) = 0U;</td></tr>
+<td>332</td><td>  <span class="kw">if</span> (<a id="332c7" class="tk">ACC_Controller_DW</a>-&gt;<a id="332c26" class="tk">temporalCounter_i1</a> &lt; 7U) <span class="br">{</span></td></tr>
 <tr name="333" id="333">
-<td>333</td><td></td></tr>
+<td>333</td><td>    <a id="333c5" class="tk">ACC_Controller_DW</a>-&gt;<a id="333c24" class="tk">temporalCounter_i1</a>++;</td></tr>
 <tr name="334" id="334">
-<td>334</td><td>  <span class="ct">/* InitializeConditions for Chart: '<a class="ct blk" blk_line="334">&lt;S1&gt;/controller</a>' */</span></td></tr>
+<td>334</td><td>  <span class="br">}</span></td></tr>
 <tr name="335" id="335">
-<td>335</td><td>  <a id="335c3" class="tk">ACC_Controller_DW</a>-&gt;<a id="335c22" class="tk">is_ON_STATE</a> = <a id="335c36" class="tk">ACC_Controll_IN_NO_ACTIVE_CHILD</a>;</td></tr>
+<td>335</td><td></td></tr>
 <tr name="336" id="336">
-<td>336</td><td>  <a id="336c3" class="tk">ACC_Controller_DW</a>-&gt;<a id="336c22" class="tk">is_WORKING_STATE</a> = <a id="336c41" class="tk">ACC_Controll_IN_NO_ACTIVE_CHILD</a>;</td></tr>
+<td>336</td><td>  <span class="ct">/* During: ACC_Controller/controller */</span></td></tr>
 <tr name="337" id="337">
-<td>337</td><td>  <a id="337c3" class="tk">ACC_Controller_DW</a>-&gt;<a id="337c22" class="tk">is_active_c3_ACC_Controller</a> = 0U;</td></tr>
+<td>337</td><td>  <span class="kw">if</span> (<a id="337c7" class="tk">ACC_Controller_DW</a>-&gt;<a id="337c26" class="tk">is_active_c3_ACC_Controller</a> == 0U) <span class="br">{</span></td></tr>
 <tr name="338" id="338">
-<td>338</td><td>  <a id="338c3" class="tk">ACC_Controller_DW</a>-&gt;<a id="338c22" class="tk">is_c3_ACC_Controller</a> = <a id="338c45" class="tk">ACC_Controll_IN_NO_ACTIVE_CHILD</a>;</td></tr>
+<td>338</td><td>    <span class="ct">/* Entry: ACC_Controller/controller */</span></td></tr>
 <tr name="339" id="339">
-<td>339</td><td><span class="br">}</span></td></tr>
+<td>339</td><td>    <a id="339c5" class="tk">ACC_Controller_DW</a>-&gt;<a id="339c24" class="tk">is_active_c3_ACC_Controller</a> = 1U;</td></tr>
 <tr name="340" id="340">
 <td>340</td><td></td></tr>
 <tr name="341" id="341">
-<td>341</td><td><span class="ct">/* Model terminate function */</span></td></tr>
+<td>341</td><td>    <span class="ct">/* Entry Internal: ACC_Controller/controller */</span></td></tr>
 <tr name="342" id="342">
-<td>342</td><td><span class="kw">void</span> <a id="342c6" class="tk">ACC_Controller_terminate</a>(<a id="342c31" class="tk">RT_MODEL_ACC_Controller_T</a> *<span class="kw">const</span> <a id="342c64" class="tk">ACC_Controller_M</a>)</td></tr>
+<td>342</td><td>    <span class="ct">/* Transition: '<a class="ct blk" blk_line="342">&lt;S5&gt;:2</a>' */</span></td></tr>
 <tr name="343" id="343">
-<td>343</td><td><span class="br">{</span></td></tr>
+<td>343</td><td>    <a id="343c5" class="tk">ACC_Controller_DW</a>-&gt;<a id="343c24" class="tk">is_c3_ACC_Controller</a> = <a id="343c47" class="tk">ACC_Controller_IN_OFF_STATE</a>;</td></tr>
 <tr name="344" id="344">
-<td>344</td><td>  <span class="ct">/* (no terminate code required) */</span></td></tr>
+<td>344</td><td></td></tr>
 <tr name="345" id="345">
-<td>345</td><td>  <a id="345c3" class="tk">UNUSED_PARAMETER</a>(<a id="345c20" class="tk">ACC_Controller_M</a>);</td></tr>
+<td>345</td><td>    <span class="ct">/* Outport: '<a class="ct blk" blk_line="345">&lt;Root&gt;/Led1</a>' */</span></td></tr>
 <tr name="346" id="346">
-<td>346</td><td><span class="br">}</span></td></tr>
+<td>346</td><td>    <span class="ct">/* Entry 'OFF_STATE': '<a class="ct blk" blk_line="346">&lt;S5&gt;:1</a>' */</span></td></tr>
 <tr name="347" id="347">
-<td>347</td><td></td></tr>
+<td>347</td><td>    *<a id="347c6" class="tk">ACC_Controller_Y_Led1</a> = 0U;</td></tr>
 <tr name="348" id="348">
-<td>348</td><td><span class="ct">/*</span></td></tr>
+<td>348</td><td>  <span class="br">}</span> <span class="kw">else</span> <span class="br">{</span></td></tr>
 <tr name="349" id="349">
-<td>349</td><td><span class="ct"> * File trailer for generated code.</span></td></tr>
+<td>349</td><td>    <span class="kw">switch</span> (<a id="349c13" class="tk">ACC_Controller_DW</a>-&gt;<a id="349c32" class="tk">is_c3_ACC_Controller</a>) <span class="br">{</span></td></tr>
 <tr name="350" id="350">
-<td>350</td><td><span class="ct"> *</span></td></tr>
+<td>350</td><td>     <span class="kw">case</span> <a id="350c11" class="tk">ACC_Controller_IN_OFF_STATE</a>:</td></tr>
 <tr name="351" id="351">
-<td>351</td><td><span class="ct"> * [EOF]</span></td></tr>
+<td>351</td><td>      <span class="ct">/* During 'OFF_STATE': '<a class="ct blk" blk_line="351">&lt;S5&gt;:1</a>' */</span></td></tr>
 <tr name="352" id="352">
-<td>352</td><td><span class="ct"> */</span></td></tr>
+<td>352</td><td>      <span class="kw">if</span> ((<a id="352c12" class="tk">ACC_Controller_U_PedalFlag</a> == 0) &amp;&amp; (<a id="352c49" class="tk">ACC_Controller_U_EnableSwitch</a> ==</td></tr>
 <tr name="353" id="353">
-<td>353</td><td></td></tr>
+<td>353</td><td>           1)) <span class="br">{</span></td></tr>
+<tr name="354" id="354">
+<td>354</td><td>        <span class="ct">/* Transition: '<a class="ct blk" blk_line="354">&lt;S5&gt;:6</a>' */</span></td></tr>
+<tr name="355" id="355">
+<td>355</td><td>        <a id="355c9" class="tk">ACC_Controller_DW</a>-&gt;<a id="355c28" class="tk">is_c3_ACC_Controller</a> = <a id="355c51" class="tk">ACC_Controller_IN_ON_STATE</a>;</td></tr>
+<tr name="356" id="356">
+<td>356</td><td></td></tr>
+<tr name="357" id="357">
+<td>357</td><td>        <span class="ct">/* Entry Internal 'ON_STATE': '<a class="ct blk" blk_line="357">&lt;S5&gt;:3</a>' */</span></td></tr>
+<tr name="358" id="358">
+<td>358</td><td>        <span class="ct">/* Transition: '<a class="ct blk" blk_line="358">&lt;S5&gt;:43</a>' */</span></td></tr>
+<tr name="359" id="359">
+<td>359</td><td>        <a id="359c9" class="tk">ACC_Controller_DW</a>-&gt;<a id="359c28" class="tk">is_ON_STATE</a> = <a id="359c42" class="tk">ACC_Controller_IN_WAIT</a>;</td></tr>
+<tr name="360" id="360">
+<td>360</td><td>        <a id="360c9" class="tk">ACC_Controller_DW</a>-&gt;<a id="360c28" class="tk">temporalCounter_i1</a> = 0U;</td></tr>
+<tr name="361" id="361">
+<td>361</td><td>      <span class="br">}</span></td></tr>
+<tr name="362" id="362">
+<td>362</td><td>      <span class="kw">break</span>;</td></tr>
+<tr name="363" id="363">
+<td>363</td><td></td></tr>
+<tr name="364" id="364">
+<td>364</td><td>     <span class="kw">case</span> <a id="364c11" class="tk">ACC_Controller_IN_ON_STATE</a>:</td></tr>
+<tr name="365" id="365">
+<td>365</td><td>      <a id="365c7" class="tk">ACC_Controller_ON_STATE</a>(&amp;<a id="365c32" class="tk">Divide</a>, <a id="365c40" class="tk">ACC_Controller_U_EnableSwitch</a>,</td></tr>
+<tr name="366" id="366">
+<td>366</td><td>        <a id="366c9" class="tk">ACC_Controller_U_PedalFlag</a>, <a id="366c37" class="tk">ACC_Controller_Y_Led1</a>, <a id="366c60" class="tk">ACC_Controller_Y_Go</a>,</td></tr>
+<tr name="367" id="367">
+<td>367</td><td>        <a id="367c9" class="tk">ACC_Controller_Y_Stop</a>, <a id="367c32" class="tk">ACC_Controller_Y_d</a>, <a id="367c52" class="tk">ACC_Controller_DW</a>);</td></tr>
+<tr name="368" id="368">
+<td>368</td><td>      <span class="kw">break</span>;</td></tr>
+<tr name="369" id="369">
+<td>369</td><td></td></tr>
+<tr name="370" id="370">
+<td>370</td><td>     <span class="kw">default</span>:</td></tr>
+<tr name="371" id="371">
+<td>371</td><td>      <span class="ct">/* During 'OVERRIDDEN_STATE': '<a class="ct blk" blk_line="371">&lt;S5&gt;:11</a>' */</span></td></tr>
+<tr name="372" id="372">
+<td>372</td><td>      <span class="kw">if</span> (<a id="372c11" class="tk">ACC_Controller_U_EnableSwitch</a> == 0) <span class="br">{</span></td></tr>
+<tr name="373" id="373">
+<td>373</td><td>        <span class="ct">/* Transition: '<a class="ct blk" blk_line="373">&lt;S5&gt;:12</a>' */</span></td></tr>
+<tr name="374" id="374">
+<td>374</td><td>        <a id="374c9" class="tk">ACC_Controller_DW</a>-&gt;<a id="374c28" class="tk">is_c3_ACC_Controller</a> = <a id="374c51" class="tk">ACC_Controller_IN_OFF_STATE</a>;</td></tr>
+<tr name="375" id="375">
+<td>375</td><td></td></tr>
+<tr name="376" id="376">
+<td>376</td><td>        <span class="ct">/* Outport: '<a class="ct blk" blk_line="376">&lt;Root&gt;/Led1</a>' */</span></td></tr>
+<tr name="377" id="377">
+<td>377</td><td>        <span class="ct">/* Entry 'OFF_STATE': '<a class="ct blk" blk_line="377">&lt;S5&gt;:1</a>' */</span></td></tr>
+<tr name="378" id="378">
+<td>378</td><td>        *<a id="378c10" class="tk">ACC_Controller_Y_Led1</a> = 0U;</td></tr>
+<tr name="379" id="379">
+<td>379</td><td>      <span class="br">}</span> <span class="kw">else</span> <span class="br">{</span></td></tr>
+<tr name="380" id="380">
+<td>380</td><td>        <span class="kw">if</span> (<a id="380c13" class="tk">ACC_Controller_U_ResetSwitch</a> == 1) <span class="br">{</span></td></tr>
+<tr name="381" id="381">
+<td>381</td><td>          <span class="ct">/* Transition: '<a class="ct blk" blk_line="381">&lt;S5&gt;:15</a>' */</span></td></tr>
+<tr name="382" id="382">
+<td>382</td><td>          <a id="382c11" class="tk">ACC_Controller_DW</a>-&gt;<a id="382c30" class="tk">is_c3_ACC_Controller</a> = <a id="382c53" class="tk">ACC_Controller_IN_ON_STATE</a>;</td></tr>
+<tr name="383" id="383">
+<td>383</td><td></td></tr>
+<tr name="384" id="384">
+<td>384</td><td>          <span class="ct">/* Entry Internal 'ON_STATE': '<a class="ct blk" blk_line="384">&lt;S5&gt;:3</a>' */</span></td></tr>
+<tr name="385" id="385">
+<td>385</td><td>          <span class="ct">/* Transition: '<a class="ct blk" blk_line="385">&lt;S5&gt;:43</a>' */</span></td></tr>
+<tr name="386" id="386">
+<td>386</td><td>          <a id="386c11" class="tk">ACC_Controller_DW</a>-&gt;<a id="386c30" class="tk">is_ON_STATE</a> = <a id="386c44" class="tk">ACC_Controller_IN_WAIT</a>;</td></tr>
+<tr name="387" id="387">
+<td>387</td><td>          <a id="387c11" class="tk">ACC_Controller_DW</a>-&gt;<a id="387c30" class="tk">temporalCounter_i1</a> = 0U;</td></tr>
+<tr name="388" id="388">
+<td>388</td><td>        <span class="br">}</span></td></tr>
+<tr name="389" id="389">
+<td>389</td><td>      <span class="br">}</span></td></tr>
+<tr name="390" id="390">
+<td>390</td><td>      <span class="kw">break</span>;</td></tr>
+<tr name="391" id="391">
+<td>391</td><td>    <span class="br">}</span></td></tr>
+<tr name="392" id="392">
+<td>392</td><td>  <span class="br">}</span></td></tr>
+<tr name="393" id="393">
+<td>393</td><td></td></tr>
+<tr name="394" id="394">
+<td>394</td><td>  <span class="ct">/* End of Chart: '<a class="ct blk" blk_line="394">&lt;S1&gt;/controller</a>' */</span></td></tr>
+<tr name="395" id="395">
+<td>395</td><td></td></tr>
+<tr name="396" id="396">
+<td>396</td><td>  <span class="ct">/* Update for Delay: '<a class="ct blk" blk_line="396">&lt;S4&gt;/Delay</a>' incorporates:</span></td></tr>
+<tr name="397" id="397">
+<td>397</td><td><span class="ct">   *  Update for Inport: '<a class="ct blk" blk_line="397">&lt;Root&gt;/Speed</a>'</span></td></tr>
+<tr name="398" id="398">
+<td>398</td><td><span class="ct">   */</span></td></tr>
+<tr name="399" id="399">
+<td>399</td><td>  <a id="399c3" class="tk">ACC_Controller_DW</a>-&gt;<a id="399c22" class="tk">Delay_DSTATE</a> = <a id="399c37" class="tk">ACC_Controller_U_Speed</a>;</td></tr>
+<tr name="400" id="400">
+<td>400</td><td></td></tr>
+<tr name="401" id="401">
+<td>401</td><td>  <span class="ct">/* Update for Delay: '<a class="ct blk" blk_line="401">&lt;S4&gt;/Delay1</a>' */</span></td></tr>
+<tr name="402" id="402">
+<td>402</td><td>  <a id="402c3" class="tk">ACC_Controller_DW</a>-&gt;<a id="402c22" class="tk">Delay1_DSTATE</a> = <a id="402c38" class="tk">rtb_Delay</a>;</td></tr>
+<tr name="403" id="403">
+<td>403</td><td></td></tr>
+<tr name="404" id="404">
+<td>404</td><td>  <span class="ct">/* Update for Delay: '<a class="ct blk" blk_line="404">&lt;S4&gt;/Delay2</a>' */</span></td></tr>
+<tr name="405" id="405">
+<td>405</td><td>  <a id="405c3" class="tk">ACC_Controller_DW</a>-&gt;<a id="405c22" class="tk">Delay2_DSTATE</a> = <a id="405c38" class="tk">rtb_Delay1</a>;</td></tr>
+<tr name="406" id="406">
+<td>406</td><td></td></tr>
+<tr name="407" id="407">
+<td>407</td><td>  <span class="ct">/* Update for Delay: '<a class="ct blk" blk_line="407">&lt;S4&gt;/Delay3</a>' */</span></td></tr>
+<tr name="408" id="408">
+<td>408</td><td>  <a id="408c3" class="tk">ACC_Controller_DW</a>-&gt;<a id="408c22" class="tk">Delay3_DSTATE</a> = <a id="408c38" class="tk">rtb_Delay2</a>;</td></tr>
+<tr name="409" id="409">
+<td>409</td><td></td></tr>
+<tr name="410" id="410">
+<td>410</td><td>  <span class="ct">/* Update for Delay: '<a class="ct blk" blk_line="410">&lt;S3&gt;/Delay</a>' incorporates:</span></td></tr>
+<tr name="411" id="411">
+<td>411</td><td><span class="ct">   *  Update for Inport: '<a class="ct blk" blk_line="411">&lt;Root&gt;/Distance</a>'</span></td></tr>
+<tr name="412" id="412">
+<td>412</td><td><span class="ct">   */</span></td></tr>
+<tr name="413" id="413">
+<td>413</td><td>  <a id="413c3" class="tk">ACC_Controller_DW</a>-&gt;<a id="413c22" class="tk">Delay_DSTATE_f</a> = <a id="413c39" class="tk">ACC_Controller_U_Distance</a>;</td></tr>
+<tr name="414" id="414">
+<td>414</td><td></td></tr>
+<tr name="415" id="415">
+<td>415</td><td>  <span class="ct">/* Update for Delay: '<a class="ct blk" blk_line="415">&lt;S3&gt;/Delay1</a>' */</span></td></tr>
+<tr name="416" id="416">
+<td>416</td><td>  <a id="416c3" class="tk">ACC_Controller_DW</a>-&gt;<a id="416c22" class="tk">Delay1_DSTATE_f</a> = <a id="416c40" class="tk">rtb_Delay_m</a>;</td></tr>
+<tr name="417" id="417">
+<td>417</td><td></td></tr>
+<tr name="418" id="418">
+<td>418</td><td>  <span class="ct">/* Update for Delay: '<a class="ct blk" blk_line="418">&lt;S3&gt;/Delay2</a>' */</span></td></tr>
+<tr name="419" id="419">
+<td>419</td><td>  <a id="419c3" class="tk">ACC_Controller_DW</a>-&gt;<a id="419c22" class="tk">Delay2_DSTATE_h</a> = <a id="419c40" class="tk">rtb_Delay1_b</a>;</td></tr>
+<tr name="420" id="420">
+<td>420</td><td></td></tr>
+<tr name="421" id="421">
+<td>421</td><td>  <span class="ct">/* Update for Delay: '<a class="ct blk" blk_line="421">&lt;S3&gt;/Delay3</a>' */</span></td></tr>
+<tr name="422" id="422">
+<td>422</td><td>  <a id="422c3" class="tk">ACC_Controller_DW</a>-&gt;<a id="422c22" class="tk">Delay3_DSTATE_j</a> = <a id="422c40" class="tk">rtb_Delay2_o</a>;</td></tr>
+<tr name="423" id="423">
+<td>423</td><td><span class="br">}</span></td></tr>
+<tr name="424" id="424">
+<td>424</td><td></td></tr>
+<tr name="425" id="425">
+<td>425</td><td><span class="ct">/* Model initialize function */</span></td></tr>
+<tr name="426" id="426">
+<td>426</td><td><span class="kw">void</span> <a id="426c6" class="tk">ACC_Controller_initialize</a>(<a id="426c32" class="tk">RT_MODEL_ACC_Controller_T</a> *<span class="kw">const</span> <a id="426c65" class="tk">ACC_Controller_M</a>,</td></tr>
+<tr name="427" id="427">
+<td>427</td><td>  <a id="427c3" class="tk">uint8_T</a> *<a id="427c12" class="tk">ACC_Controller_U_EnableSwitch</a>, <a id="427c43" class="tk">uint8_T</a> *<a id="427c52" class="tk">ACC_Controller_U_PedalFlag</a>,</td></tr>
+<tr name="428" id="428">
+<td>428</td><td>  <a id="428c3" class="tk">uint8_T</a> *<a id="428c12" class="tk">ACC_Controller_U_ResetSwitch</a>, <a id="428c42" class="tk">real_T</a> *<a id="428c50" class="tk">ACC_Controller_U_Speed</a>, <a id="428c74" class="tk">real_T</a> *</td></tr>
+<tr name="429" id="429">
+<td>429</td><td>  <a id="429c3" class="tk">ACC_Controller_U_Distance</a>, <a id="429c30" class="tk">uint8_T</a> *<a id="429c39" class="tk">ACC_Controller_Y_Led1</a>, <a id="429c62" class="tk">uint8_T</a></td></tr>
+<tr name="430" id="430">
+<td>430</td><td>  *<a id="430c4" class="tk">ACC_Controller_Y_Go</a>, <a id="430c25" class="tk">uint8_T</a> *<a id="430c34" class="tk">ACC_Controller_Y_Stop</a>, <a id="430c57" class="tk">real_T</a></td></tr>
+<tr name="431" id="431">
+<td>431</td><td>  *<a id="431c4" class="tk">ACC_Controller_Y_d</a>)</td></tr>
+<tr name="432" id="432">
+<td>432</td><td><span class="br">{</span></td></tr>
+<tr name="433" id="433">
+<td>433</td><td>  <a id="433c3" class="tk">P_ACC_Controller_T</a> *<a id="433c23" class="tk">ACC_Controller_P</a> = ((<a id="433c44" class="tk">P_ACC_Controller_T</a> *)</td></tr>
+<tr name="434" id="434">
+<td>434</td><td>    <a id="434c5" class="tk">ACC_Controller_M</a>-&gt;<a id="434c23" class="tk">ModelData</a>.<a id="434c33" class="tk">defaultParam</a>);</td></tr>
+<tr name="435" id="435">
+<td>435</td><td>  <a id="435c3" class="tk">DW_ACC_Controller_T</a> *<a id="435c24" class="tk">ACC_Controller_DW</a> = ((<a id="435c46" class="tk">DW_ACC_Controller_T</a> *)</td></tr>
+<tr name="436" id="436">
+<td>436</td><td>    <a id="436c5" class="tk">ACC_Controller_M</a>-&gt;<a id="436c23" class="tk">ModelData</a>.<a id="436c33" class="tk">dwork</a>);</td></tr>
+<tr name="437" id="437">
+<td>437</td><td></td></tr>
+<tr name="438" id="438">
+<td>438</td><td>  <span class="ct">/* Registration code */</span></td></tr>
+<tr name="439" id="439">
+<td>439</td><td></td></tr>
+<tr name="440" id="440">
+<td>440</td><td>  <span class="ct">/* states (dwork) */</span></td></tr>
+<tr name="441" id="441">
+<td>441</td><td>  (<span class="kw">void</span>) <a id="441c10" class="tk">memset</a>((<span class="kw">void</span> *)<a id="441c25" class="tk">ACC_Controller_DW</a>, 0,</td></tr>
+<tr name="442" id="442">
+<td>442</td><td>                <span class="kw">sizeof</span>(<a id="442c24" class="tk">DW_ACC_Controller_T</a>));</td></tr>
+<tr name="443" id="443">
+<td>443</td><td></td></tr>
+<tr name="444" id="444">
+<td>444</td><td>  <span class="ct">/* external inputs */</span></td></tr>
+<tr name="445" id="445">
+<td>445</td><td>  (*<a id="445c5" class="tk">ACC_Controller_U_EnableSwitch</a>) = 0U;</td></tr>
+<tr name="446" id="446">
+<td>446</td><td>  (*<a id="446c5" class="tk">ACC_Controller_U_PedalFlag</a>) = 0U;</td></tr>
+<tr name="447" id="447">
+<td>447</td><td>  (*<a id="447c5" class="tk">ACC_Controller_U_ResetSwitch</a>) = 0U;</td></tr>
+<tr name="448" id="448">
+<td>448</td><td>  (*<a id="448c5" class="tk">ACC_Controller_U_Speed</a>) = 0.0;</td></tr>
+<tr name="449" id="449">
+<td>449</td><td>  (*<a id="449c5" class="tk">ACC_Controller_U_Distance</a>) = 0.0;</td></tr>
+<tr name="450" id="450">
+<td>450</td><td></td></tr>
+<tr name="451" id="451">
+<td>451</td><td>  <span class="ct">/* external outputs */</span></td></tr>
+<tr name="452" id="452">
+<td>452</td><td>  (*<a id="452c5" class="tk">ACC_Controller_Y_Led1</a>) = 0U;</td></tr>
+<tr name="453" id="453">
+<td>453</td><td>  (*<a id="453c5" class="tk">ACC_Controller_Y_Go</a>) = 0U;</td></tr>
+<tr name="454" id="454">
+<td>454</td><td>  (*<a id="454c5" class="tk">ACC_Controller_Y_Stop</a>) = 0U;</td></tr>
+<tr name="455" id="455">
+<td>455</td><td>  (*<a id="455c5" class="tk">ACC_Controller_Y_d</a>) = 0.0;</td></tr>
+<tr name="456" id="456">
+<td>456</td><td></td></tr>
+<tr name="457" id="457">
+<td>457</td><td>  <span class="ct">/* InitializeConditions for Delay: '<a class="ct blk" blk_line="457">&lt;S4&gt;/Delay</a>' */</span></td></tr>
+<tr name="458" id="458">
+<td>458</td><td>  <a id="458c3" class="tk">ACC_Controller_DW</a>-&gt;<a id="458c22" class="tk">Delay_DSTATE</a> = <a id="458c37" class="tk">ACC_Controller_P</a>-&gt;<a id="458c55" class="tk">Delay_InitialCondition</a>;</td></tr>
+<tr name="459" id="459">
+<td>459</td><td></td></tr>
+<tr name="460" id="460">
+<td>460</td><td>  <span class="ct">/* InitializeConditions for Delay: '<a class="ct blk" blk_line="460">&lt;S4&gt;/Delay1</a>' */</span></td></tr>
+<tr name="461" id="461">
+<td>461</td><td>  <a id="461c3" class="tk">ACC_Controller_DW</a>-&gt;<a id="461c22" class="tk">Delay1_DSTATE</a> = <a id="461c38" class="tk">ACC_Controller_P</a>-&gt;<a id="461c56" class="tk">Delay1_InitialCondition</a>;</td></tr>
+<tr name="462" id="462">
+<td>462</td><td></td></tr>
+<tr name="463" id="463">
+<td>463</td><td>  <span class="ct">/* InitializeConditions for Delay: '<a class="ct blk" blk_line="463">&lt;S4&gt;/Delay2</a>' */</span></td></tr>
+<tr name="464" id="464">
+<td>464</td><td>  <a id="464c3" class="tk">ACC_Controller_DW</a>-&gt;<a id="464c22" class="tk">Delay2_DSTATE</a> = <a id="464c38" class="tk">ACC_Controller_P</a>-&gt;<a id="464c56" class="tk">Delay2_InitialCondition</a>;</td></tr>
+<tr name="465" id="465">
+<td>465</td><td></td></tr>
+<tr name="466" id="466">
+<td>466</td><td>  <span class="ct">/* InitializeConditions for Delay: '<a class="ct blk" blk_line="466">&lt;S4&gt;/Delay3</a>' */</span></td></tr>
+<tr name="467" id="467">
+<td>467</td><td>  <a id="467c3" class="tk">ACC_Controller_DW</a>-&gt;<a id="467c22" class="tk">Delay3_DSTATE</a> = <a id="467c38" class="tk">ACC_Controller_P</a>-&gt;<a id="467c56" class="tk">Delay3_InitialCondition</a>;</td></tr>
+<tr name="468" id="468">
+<td>468</td><td></td></tr>
+<tr name="469" id="469">
+<td>469</td><td>  <span class="ct">/* InitializeConditions for Delay: '<a class="ct blk" blk_line="469">&lt;S3&gt;/Delay</a>' */</span></td></tr>
+<tr name="470" id="470">
+<td>470</td><td>  <a id="470c3" class="tk">ACC_Controller_DW</a>-&gt;<a id="470c22" class="tk">Delay_DSTATE_f</a> = <a id="470c39" class="tk">ACC_Controller_P</a>-&gt;<a id="470c57" class="tk">Delay_InitialCondition_i</a>;</td></tr>
+<tr name="471" id="471">
+<td>471</td><td></td></tr>
+<tr name="472" id="472">
+<td>472</td><td>  <span class="ct">/* InitializeConditions for Delay: '<a class="ct blk" blk_line="472">&lt;S3&gt;/Delay1</a>' */</span></td></tr>
+<tr name="473" id="473">
+<td>473</td><td>  <a id="473c3" class="tk">ACC_Controller_DW</a>-&gt;<a id="473c22" class="tk">Delay1_DSTATE_f</a> =</td></tr>
+<tr name="474" id="474">
+<td>474</td><td>    <a id="474c5" class="tk">ACC_Controller_P</a>-&gt;<a id="474c23" class="tk">Delay1_InitialCondition_o</a>;</td></tr>
+<tr name="475" id="475">
+<td>475</td><td></td></tr>
+<tr name="476" id="476">
+<td>476</td><td>  <span class="ct">/* InitializeConditions for Delay: '<a class="ct blk" blk_line="476">&lt;S3&gt;/Delay2</a>' */</span></td></tr>
+<tr name="477" id="477">
+<td>477</td><td>  <a id="477c3" class="tk">ACC_Controller_DW</a>-&gt;<a id="477c22" class="tk">Delay2_DSTATE_h</a> =</td></tr>
+<tr name="478" id="478">
+<td>478</td><td>    <a id="478c5" class="tk">ACC_Controller_P</a>-&gt;<a id="478c23" class="tk">Delay2_InitialCondition_h</a>;</td></tr>
+<tr name="479" id="479">
+<td>479</td><td></td></tr>
+<tr name="480" id="480">
+<td>480</td><td>  <span class="ct">/* InitializeConditions for Delay: '<a class="ct blk" blk_line="480">&lt;S3&gt;/Delay3</a>' */</span></td></tr>
+<tr name="481" id="481">
+<td>481</td><td>  <a id="481c3" class="tk">ACC_Controller_DW</a>-&gt;<a id="481c22" class="tk">Delay3_DSTATE_j</a> =</td></tr>
+<tr name="482" id="482">
+<td>482</td><td>    <a id="482c5" class="tk">ACC_Controller_P</a>-&gt;<a id="482c23" class="tk">Delay3_InitialCondition_a</a>;</td></tr>
+<tr name="483" id="483">
+<td>483</td><td></td></tr>
+<tr name="484" id="484">
+<td>484</td><td>  <span class="ct">/* InitializeConditions for Chart: '<a class="ct blk" blk_line="484">&lt;S1&gt;/controller</a>' */</span></td></tr>
+<tr name="485" id="485">
+<td>485</td><td>  <a id="485c3" class="tk">ACC_Controller_DW</a>-&gt;<a id="485c22" class="tk">is_ON_STATE</a> = <a id="485c36" class="tk">ACC_Controll_IN_NO_ACTIVE_CHILD</a>;</td></tr>
+<tr name="486" id="486">
+<td>486</td><td>  <a id="486c3" class="tk">ACC_Controller_DW</a>-&gt;<a id="486c22" class="tk">temporalCounter_i1</a> = 0U;</td></tr>
+<tr name="487" id="487">
+<td>487</td><td>  <a id="487c3" class="tk">ACC_Controller_DW</a>-&gt;<a id="487c22" class="tk">is_WORKING_STATE</a> = <a id="487c41" class="tk">ACC_Controll_IN_NO_ACTIVE_CHILD</a>;</td></tr>
+<tr name="488" id="488">
+<td>488</td><td>  <a id="488c3" class="tk">ACC_Controller_DW</a>-&gt;<a id="488c22" class="tk">is_active_c3_ACC_Controller</a> = 0U;</td></tr>
+<tr name="489" id="489">
+<td>489</td><td>  <a id="489c3" class="tk">ACC_Controller_DW</a>-&gt;<a id="489c22" class="tk">is_c3_ACC_Controller</a> = <a id="489c45" class="tk">ACC_Controll_IN_NO_ACTIVE_CHILD</a>;</td></tr>
+<tr name="490" id="490">
+<td>490</td><td><span class="br">}</span></td></tr>
+<tr name="491" id="491">
+<td>491</td><td></td></tr>
+<tr name="492" id="492">
+<td>492</td><td><span class="ct">/* Model terminate function */</span></td></tr>
+<tr name="493" id="493">
+<td>493</td><td><span class="kw">void</span> <a id="493c6" class="tk">ACC_Controller_terminate</a>(<a id="493c31" class="tk">RT_MODEL_ACC_Controller_T</a> *<span class="kw">const</span> <a id="493c64" class="tk">ACC_Controller_M</a>)</td></tr>
+<tr name="494" id="494">
+<td>494</td><td><span class="br">{</span></td></tr>
+<tr name="495" id="495">
+<td>495</td><td>  <span class="ct">/* (no terminate code required) */</span></td></tr>
+<tr name="496" id="496">
+<td>496</td><td>  <a id="496c3" class="tk">UNUSED_PARAMETER</a>(<a id="496c20" class="tk">ACC_Controller_M</a>);</td></tr>
+<tr name="497" id="497">
+<td>497</td><td><span class="br">}</span></td></tr>
+<tr name="498" id="498">
+<td>498</td><td></td></tr>
+<tr name="499" id="499">
+<td>499</td><td><span class="ct">/*</span></td></tr>
+<tr name="500" id="500">
+<td>500</td><td><span class="ct"> * File trailer for generated code.</span></td></tr>
+<tr name="501" id="501">
+<td>501</td><td><span class="ct"> *</span></td></tr>
+<tr name="502" id="502">
+<td>502</td><td><span class="ct"> * [EOF]</span></td></tr>
+<tr name="503" id="503">
+<td>503</td><td><span class="ct"> */</span></td></tr>
+<tr name="504" id="504">
+<td>504</td><td></td></tr>
 </table>
 </pre>
 </body>

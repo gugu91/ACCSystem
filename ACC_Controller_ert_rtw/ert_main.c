@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'ACC_Controller'.
  *
- * Model version                  : 1.16
+ * Model version                  : 1.25
  * Simulink Coder version         : 8.8 (R2015a) 09-Feb-2015
- * C/C++ source code generated on : Tue Jul  7 19:24:08 2015
+ * C/C++ source code generated on : Wed Jul  8 23:07:02 2015
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -24,6 +24,66 @@
 
 static RT_MODEL_ACC_Controller_T ACC_Controller_M_;
 static RT_MODEL_ACC_Controller_T *const ACC_Controller_M = &ACC_Controller_M_;/* Real-time model */
+static P_ACC_Controller_T ACC_Controller_P = {
+  0.0,                                 /* Expression: 0
+                                        * Referenced by: '<S4>/Delay'
+                                        */
+  0.0,                                 /* Expression: 0
+                                        * Referenced by: '<S4>/Delay1'
+                                        */
+  0.0,                                 /* Expression: 0
+                                        * Referenced by: '<S4>/Delay2'
+                                        */
+  0.0,                                 /* Expression: 0
+                                        * Referenced by: '<S4>/Delay3'
+                                        */
+  5.0,                                 /* Expression: 5
+                                        * Referenced by: '<S4>/Constant'
+                                        */
+  10.0,                                /* Expression: 10
+                                        * Referenced by: '<S2>/Constant'
+                                        */
+  0.0,                                 /* Expression: 0
+                                        * Referenced by: '<S3>/Delay'
+                                        */
+  0.0,                                 /* Expression: 0
+                                        * Referenced by: '<S3>/Delay1'
+                                        */
+  0.0,                                 /* Expression: 0
+                                        * Referenced by: '<S3>/Delay2'
+                                        */
+  0.0,                                 /* Expression: 0
+                                        * Referenced by: '<S3>/Delay3'
+                                        */
+  5.0,                                 /* Expression: 5
+                                        * Referenced by: '<S3>/Constant'
+                                        */
+  1U,                                  /* Computed Parameter: Delay_DelayLength
+                                        * Referenced by: '<S4>/Delay'
+                                        */
+  1U,                                  /* Computed Parameter: Delay1_DelayLength
+                                        * Referenced by: '<S4>/Delay1'
+                                        */
+  1U,                                  /* Computed Parameter: Delay2_DelayLength
+                                        * Referenced by: '<S4>/Delay2'
+                                        */
+  1U,                                  /* Computed Parameter: Delay3_DelayLength
+                                        * Referenced by: '<S4>/Delay3'
+                                        */
+  1U,                                  /* Computed Parameter: Delay_DelayLength_i
+                                        * Referenced by: '<S3>/Delay'
+                                        */
+  1U,                                  /* Computed Parameter: Delay1_DelayLength_p
+                                        * Referenced by: '<S3>/Delay1'
+                                        */
+  1U,                                  /* Computed Parameter: Delay2_DelayLength_b
+                                        * Referenced by: '<S3>/Delay2'
+                                        */
+  1U                                   /* Computed Parameter: Delay3_DelayLength_h
+                                        * Referenced by: '<S3>/Delay3'
+                                        */
+};                                     /* Modifiable parameters */
+
 static DW_ACC_Controller_T ACC_Controller_DW;/* Observable states */
 
 /* '<Root>/EnableSwitch' */
@@ -49,6 +109,9 @@ static uint8_T ACC_Controller_Y_Go;
 
 /* '<Root>/Stop' */
 static uint8_T ACC_Controller_Y_Stop;
+
+/* '<Root>/d' */
+static real_T ACC_Controller_Y_d;
 
 /*
  * Associating rt_OneStep with a real-time clock or interrupt service routine
@@ -85,7 +148,7 @@ void rt_OneStep(RT_MODEL_ACC_Controller_T *const ACC_Controller_M)
                       ACC_Controller_U_PedalFlag, ACC_Controller_U_ResetSwitch,
                       ACC_Controller_U_Speed, ACC_Controller_U_Distance,
                       &ACC_Controller_Y_Led1, &ACC_Controller_Y_Go,
-                      &ACC_Controller_Y_Stop);
+                      &ACC_Controller_Y_Stop, &ACC_Controller_Y_d);
 
   /* Get model outputs here */
 
@@ -110,13 +173,14 @@ int_T main(int_T argc, const char *argv[])
   (void)(argv);
 
   /* Pack model data into RTM */
+  ACC_Controller_M->ModelData.defaultParam = &ACC_Controller_P;
   ACC_Controller_M->ModelData.dwork = &ACC_Controller_DW;
 
   /* Initialize model */
   ACC_Controller_initialize(ACC_Controller_M, &ACC_Controller_U_EnableSwitch,
     &ACC_Controller_U_PedalFlag, &ACC_Controller_U_ResetSwitch,
     &ACC_Controller_U_Speed, &ACC_Controller_U_Distance, &ACC_Controller_Y_Led1,
-    &ACC_Controller_Y_Go, &ACC_Controller_Y_Stop);
+    &ACC_Controller_Y_Go, &ACC_Controller_Y_Stop, &ACC_Controller_Y_d);
 
   /* Attach rt_OneStep to a timer or interrupt service routine with
    * period 0.1 seconds (the model's base sample time) here.  The

@@ -2,7 +2,7 @@
 ## Makefile generated for Simulink model 'ACC_Controller'. 
 ## 
 ## Makefile     : ACC_Controller.mk
-## Generated on : Tue Jul 07 19:24:11 2015
+## Generated on : Wed Jul 08 21:33:36 2015
 ## MATLAB Coder version: 2.8 (R2015a)
 ## 
 ## Build Info:

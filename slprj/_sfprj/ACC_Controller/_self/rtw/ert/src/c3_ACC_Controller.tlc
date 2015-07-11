@@ -44,10 +44,10 @@
       Path         "setSpeed"\
     }\
     ChartData {\
-      Name         "safety"\
-      Description  "ChartLocal"\
+      Name         "temporalCounter_i1"\
+      Description  "TemporalCounter"\
       SFName       ""\
-      Path         "safety"\
+      Path         ""\
     }\
   }
   %return ChartDataElements
