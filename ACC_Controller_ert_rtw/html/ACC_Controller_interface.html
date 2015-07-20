@@ -61,7 +61,7 @@ Prototype
 </td>
 <td width="75%" align="left" valign="top">
 <b>
-void ACC_Controller_initialize(RT_MODEL_ACC_Controller_T&nbsp;*const&nbsp;ACC_Controller_M, uint8_T&nbsp;*ACC_Controller_U_EnableSwitch, uint8_T&nbsp;*ACC_Controller_U_PedalFlag, uint8_T&nbsp;*ACC_Controller_U_ResetSwitch, real_T&nbsp;*ACC_Controller_U_Speed, real_T&nbsp;*ACC_Controller_U_Distance, uint8_T&nbsp;*ACC_Controller_Y_Led1, uint8_T&nbsp;*ACC_Controller_Y_Go, uint8_T&nbsp;*ACC_Controller_Y_Stop, real_T&nbsp;*ACC_Controller_Y_d)
+void ACC_Controller_initialize(RT_MODEL_ACC_Controller_T&nbsp;*const&nbsp;ACC_Controller_M, uint8_T&nbsp;*ACC_Controller_U_EnableSwitch, uint8_T&nbsp;*ACC_Controller_U_PedalFlag, uint8_T&nbsp;*ACC_Controller_U_ResetSwitch, real_T&nbsp;*ACC_Controller_U_Distance, real_T&nbsp;*ACC_Controller_U_Speed, uint8_T&nbsp;*ACC_Controller_U_CANAlive, uint8_T&nbsp;*ACC_Controller_U_DistanceAlive, uint8_T&nbsp;*ACC_Controller_Y_Go, uint8_T&nbsp;*ACC_Controller_Y_Stop, real_T&nbsp;*ACC_Controller_Y_d, uint8_T&nbsp;*ACC_Controller_Y_Led1)
 </b>
 
 </td>
@@ -183,21 +183,6 @@ uint8_T&nbsp;*
 5
 </td>
 <td align="left" valign="top">
-ACC_Controller_U_Speed
-</td>
-<td align="left" valign="top">
-real_T&nbsp;*
-</td>
-<td align="left" valign="top">
-<a href="matlab:coder.internal.code2model('ACCSystem:142')" name="code2model" class="code2model">&lt;S1&gt;/Speed</a>
-</td>
-
-</tr>
-<tr class="odd">
-<td align="right" valign="top">
-6
-</td>
-<td align="left" valign="top">
 ACC_Controller_U_Distance
 </td>
 <td align="left" valign="top">
@@ -208,24 +193,54 @@ real_T&nbsp;*
 </td>
 
 </tr>
+<tr class="odd">
+<td align="right" valign="top">
+6
+</td>
+<td align="left" valign="top">
+ACC_Controller_U_Speed
+</td>
+<td align="left" valign="top">
+real_T&nbsp;*
+</td>
+<td align="left" valign="top">
+<a href="matlab:coder.internal.code2model('ACCSystem:440')" name="code2model" class="code2model">&lt;S1&gt;/Speed</a>
+</td>
+
+</tr>
 <tr class="even">
 <td align="right" valign="top">
 7
 </td>
 <td align="left" valign="top">
-ACC_Controller_Y_Led1
+ACC_Controller_U_CANAlive
 </td>
 <td align="left" valign="top">
 uint8_T&nbsp;*
 </td>
 <td align="left" valign="top">
-<a href="matlab:coder.internal.code2model('ACCSystem:144')" name="code2model" class="code2model">&lt;S1&gt;/Led1</a>
+<a href="matlab:coder.internal.code2model('ACCSystem:655')" name="code2model" class="code2model">&lt;S1&gt;/CAN Alive</a>
 </td>
 
 </tr>
 <tr class="odd">
 <td align="right" valign="top">
 8
+</td>
+<td align="left" valign="top">
+ACC_Controller_U_DistanceAlive
+</td>
+<td align="left" valign="top">
+uint8_T&nbsp;*
+</td>
+<td align="left" valign="top">
+<a href="matlab:coder.internal.code2model('ACCSystem:656')" name="code2model" class="code2model">&lt;S1&gt;/Distance Alive</a>
+</td>
+
+</tr>
+<tr class="even">
+<td align="right" valign="top">
+9
 </td>
 <td align="left" valign="top">
 ACC_Controller_Y_Go
@@ -238,9 +253,9 @@ uint8_T&nbsp;*
 </td>
 
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="right" valign="top">
-9
+10
 </td>
 <td align="left" valign="top">
 ACC_Controller_Y_Stop
@@ -253,9 +268,9 @@ uint8_T&nbsp;*
 </td>
 
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="right" valign="top">
-10
+11
 </td>
 <td align="left" valign="top">
 ACC_Controller_Y_d
@@ -265,6 +280,21 @@ real_T&nbsp;*
 </td>
 <td align="left" valign="top">
 <a href="matlab:coder.internal.code2model('ACCSystem:416')" name="code2model" class="code2model">&lt;S1&gt;/d</a>
+</td>
+
+</tr>
+<tr class="odd">
+<td align="right" valign="top">
+12
+</td>
+<td align="left" valign="top">
+ACC_Controller_Y_Led1
+</td>
+<td align="left" valign="top">
+uint8_T&nbsp;*
+</td>
+<td align="left" valign="top">
+<a href="matlab:coder.internal.code2model('ACCSystem:144')" name="code2model" class="code2model">&lt;S1&gt;/Led1</a>
 </td>
 
 </tr>
@@ -304,7 +334,7 @@ Prototype
 </td>
 <td width="75%" align="left" valign="top">
 <b>
-void ACC_Controller_step(RT_MODEL_ACC_Controller_T&nbsp;*const&nbsp;ACC_Controller_M, uint8_T ACC_Controller_U_EnableSwitch, uint8_T ACC_Controller_U_PedalFlag, uint8_T ACC_Controller_U_ResetSwitch, real_T ACC_Controller_U_Speed, real_T ACC_Controller_U_Distance, uint8_T&nbsp;*ACC_Controller_Y_Led1, uint8_T&nbsp;*ACC_Controller_Y_Go, uint8_T&nbsp;*ACC_Controller_Y_Stop, real_T&nbsp;*ACC_Controller_Y_d)
+void ACC_Controller_step(RT_MODEL_ACC_Controller_T&nbsp;*const&nbsp;ACC_Controller_M, uint8_T ACC_Controller_U_EnableSwitch, uint8_T ACC_Controller_U_PedalFlag, uint8_T ACC_Controller_U_ResetSwitch, real_T ACC_Controller_U_Distance, real_T ACC_Controller_U_Speed, uint8_T ACC_Controller_U_CANAlive, uint8_T ACC_Controller_U_DistanceAlive, uint8_T&nbsp;*ACC_Controller_Y_Go, uint8_T&nbsp;*ACC_Controller_Y_Stop, real_T&nbsp;*ACC_Controller_Y_d, uint8_T&nbsp;*ACC_Controller_Y_Led1)
 </b>
 
 </td>
@@ -426,21 +456,6 @@ uint8_T
 5
 </td>
 <td align="left" valign="top">
-ACC_Controller_U_Speed
-</td>
-<td align="left" valign="top">
-real_T
-</td>
-<td align="left" valign="top">
-<a href="matlab:coder.internal.code2model('ACCSystem:142')" name="code2model" class="code2model">&lt;S1&gt;/Speed</a>
-</td>
-
-</tr>
-<tr class="odd">
-<td align="right" valign="top">
-6
-</td>
-<td align="left" valign="top">
 ACC_Controller_U_Distance
 </td>
 <td align="left" valign="top">
@@ -451,24 +466,54 @@ real_T
 </td>
 
 </tr>
+<tr class="odd">
+<td align="right" valign="top">
+6
+</td>
+<td align="left" valign="top">
+ACC_Controller_U_Speed
+</td>
+<td align="left" valign="top">
+real_T
+</td>
+<td align="left" valign="top">
+<a href="matlab:coder.internal.code2model('ACCSystem:440')" name="code2model" class="code2model">&lt;S1&gt;/Speed</a>
+</td>
+
+</tr>
 <tr class="even">
 <td align="right" valign="top">
 7
 </td>
 <td align="left" valign="top">
-ACC_Controller_Y_Led1
+ACC_Controller_U_CANAlive
 </td>
 <td align="left" valign="top">
-uint8_T&nbsp;*
+uint8_T
 </td>
 <td align="left" valign="top">
-<a href="matlab:coder.internal.code2model('ACCSystem:144')" name="code2model" class="code2model">&lt;S1&gt;/Led1</a>
+<a href="matlab:coder.internal.code2model('ACCSystem:655')" name="code2model" class="code2model">&lt;S1&gt;/CAN Alive</a>
 </td>
 
 </tr>
 <tr class="odd">
 <td align="right" valign="top">
 8
+</td>
+<td align="left" valign="top">
+ACC_Controller_U_DistanceAlive
+</td>
+<td align="left" valign="top">
+uint8_T
+</td>
+<td align="left" valign="top">
+<a href="matlab:coder.internal.code2model('ACCSystem:656')" name="code2model" class="code2model">&lt;S1&gt;/Distance Alive</a>
+</td>
+
+</tr>
+<tr class="even">
+<td align="right" valign="top">
+9
 </td>
 <td align="left" valign="top">
 ACC_Controller_Y_Go
@@ -481,9 +526,9 @@ uint8_T&nbsp;*
 </td>
 
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="right" valign="top">
-9
+10
 </td>
 <td align="left" valign="top">
 ACC_Controller_Y_Stop
@@ -496,9 +541,9 @@ uint8_T&nbsp;*
 </td>
 
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="right" valign="top">
-10
+11
 </td>
 <td align="left" valign="top">
 ACC_Controller_Y_d
@@ -508,6 +553,21 @@ real_T&nbsp;*
 </td>
 <td align="left" valign="top">
 <a href="matlab:coder.internal.code2model('ACCSystem:416')" name="code2model" class="code2model">&lt;S1&gt;/d</a>
+</td>
+
+</tr>
+<tr class="odd">
+<td align="right" valign="top">
+12
+</td>
+<td align="left" valign="top">
+ACC_Controller_Y_Led1
+</td>
+<td align="left" valign="top">
+uint8_T&nbsp;*
+</td>
+<td align="left" valign="top">
+<a href="matlab:coder.internal.code2model('ACCSystem:144')" name="code2model" class="code2model">&lt;S1&gt;/Led1</a>
 </td>
 
 </tr>
@@ -735,7 +795,7 @@ uint8_T
 </tr>
 <tr class="odd">
 <td width="42%" align="left" valign="top">
-<a href="matlab:coder.internal.code2model('ACCSystem:142')" name="code2model" class="code2model">&lt;S1&gt;/Speed</a>
+<a href="matlab:coder.internal.code2model('ACCSystem:143')" name="code2model" class="code2model">&lt;S1&gt;/Distance</a>
 </td>
 <td width="26%" align="left" valign="top">
 <i>
@@ -753,7 +813,7 @@ real_T
 </tr>
 <tr class="even">
 <td width="42%" align="left" valign="top">
-<a href="matlab:coder.internal.code2model('ACCSystem:143')" name="code2model" class="code2model">&lt;S1&gt;/Distance</a>
+<a href="matlab:coder.internal.code2model('ACCSystem:440')" name="code2model" class="code2model">&lt;S1&gt;/Speed</a>
 </td>
 <td width="26%" align="left" valign="top">
 <i>
@@ -763,6 +823,42 @@ Defined externally
 </td>
 <td width="21%" align="left" valign="top">
 real_T
+</td>
+<td width="10%" align="right" valign="top">
+1
+</td>
+
+</tr>
+<tr class="odd">
+<td width="42%" align="left" valign="top">
+<a href="matlab:coder.internal.code2model('ACCSystem:655')" name="code2model" class="code2model">&lt;S1&gt;/CAN Alive</a>
+</td>
+<td width="26%" align="left" valign="top">
+<i>
+Defined externally
+</i>
+
+</td>
+<td width="21%" align="left" valign="top">
+uint8_T
+</td>
+<td width="10%" align="right" valign="top">
+1
+</td>
+
+</tr>
+<tr class="even">
+<td width="42%" align="left" valign="top">
+<a href="matlab:coder.internal.code2model('ACCSystem:656')" name="code2model" class="code2model">&lt;S1&gt;/Distance Alive</a>
+</td>
+<td width="26%" align="left" valign="top">
+<i>
+Defined externally
+</i>
+
+</td>
+<td width="21%" align="left" valign="top">
+uint8_T
 </td>
 <td width="10%" align="right" valign="top">
 1
@@ -807,24 +903,6 @@ Dimension
 </tr>
 <tr class="even">
 <td width="42%" align="left" valign="top">
-<a href="matlab:coder.internal.code2model('ACCSystem:144')" name="code2model" class="code2model">&lt;S1&gt;/Led1</a>
-</td>
-<td width="26%" align="left" valign="top">
-<i>
-Defined externally
-</i>
-
-</td>
-<td width="21%" align="left" valign="top">
-uint8_T
-</td>
-<td width="10%" align="right" valign="top">
-1
-</td>
-
-</tr>
-<tr class="odd">
-<td width="42%" align="left" valign="top">
 <a href="matlab:coder.internal.code2model('ACCSystem:145')" name="code2model" class="code2model">&lt;S1&gt;/Go</a>
 </td>
 <td width="26%" align="left" valign="top">
@@ -841,7 +919,7 @@ uint8_T
 </td>
 
 </tr>
-<tr class="even">
+<tr class="odd">
 <td width="42%" align="left" valign="top">
 <a href="matlab:coder.internal.code2model('ACCSystem:146')" name="code2model" class="code2model">&lt;S1&gt;/Stop</a>
 </td>
@@ -859,7 +937,7 @@ uint8_T
 </td>
 
 </tr>
-<tr class="odd">
+<tr class="even">
 <td width="42%" align="left" valign="top">
 <a href="matlab:coder.internal.code2model('ACCSystem:416')" name="code2model" class="code2model">&lt;S1&gt;/d</a>
 </td>
@@ -871,6 +949,24 @@ Defined externally
 </td>
 <td width="21%" align="left" valign="top">
 real_T
+</td>
+<td width="10%" align="right" valign="top">
+1
+</td>
+
+</tr>
+<tr class="odd">
+<td width="42%" align="left" valign="top">
+<a href="matlab:coder.internal.code2model('ACCSystem:144')" name="code2model" class="code2model">&lt;S1&gt;/Led1</a>
+</td>
+<td width="26%" align="left" valign="top">
+<i>
+Defined externally
+</i>
+
+</td>
+<td width="21%" align="left" valign="top">
+uint8_T
 </td>
 <td width="10%" align="right" valign="top">
 1
@@ -915,7 +1011,7 @@ Dimension
 </tr>
 <tr class="even">
 <td width="42%" align="left" valign="top">
-<a href="matlab:coder.internal.code2model('ACCSystem:280')" name="code2model" class="code2model">&lt;S4&gt;/Delay</a>
+<a href="matlab:coder.internal.code2model('ACCSystem:280')" name="code2model" class="code2model">&lt;S6&gt;/Delay</a>
 </td>
 <td width="26%" align="left" valign="top">
 <i>
@@ -933,7 +1029,7 @@ real_T
 </tr>
 <tr class="odd">
 <td width="42%" align="left" valign="top">
-<a href="matlab:coder.internal.code2model('ACCSystem:281')" name="code2model" class="code2model">&lt;S4&gt;/Delay1</a>
+<a href="matlab:coder.internal.code2model('ACCSystem:281')" name="code2model" class="code2model">&lt;S6&gt;/Delay1</a>
 </td>
 <td width="26%" align="left" valign="top">
 <i>
@@ -951,7 +1047,7 @@ real_T
 </tr>
 <tr class="even">
 <td width="42%" align="left" valign="top">
-<a href="matlab:coder.internal.code2model('ACCSystem:282')" name="code2model" class="code2model">&lt;S4&gt;/Delay2</a>
+<a href="matlab:coder.internal.code2model('ACCSystem:282')" name="code2model" class="code2model">&lt;S6&gt;/Delay2</a>
 </td>
 <td width="26%" align="left" valign="top">
 <i>
@@ -969,7 +1065,7 @@ real_T
 </tr>
 <tr class="odd">
 <td width="42%" align="left" valign="top">
-<a href="matlab:coder.internal.code2model('ACCSystem:283')" name="code2model" class="code2model">&lt;S4&gt;/Delay3</a>
+<a href="matlab:coder.internal.code2model('ACCSystem:283')" name="code2model" class="code2model">&lt;S6&gt;/Delay3</a>
 </td>
 <td width="26%" align="left" valign="top">
 <i>
@@ -987,7 +1083,7 @@ real_T
 </tr>
 <tr class="even">
 <td width="42%" align="left" valign="top">
-<a href="matlab:coder.internal.code2model('ACCSystem:279')" name="code2model" class="code2model">&lt;S4&gt;/Constant</a>
+<a href="matlab:coder.internal.code2model('ACCSystem:279')" name="code2model" class="code2model">&lt;S6&gt;/Constant</a>
 </td>
 <td width="26%" align="left" valign="top">
 <i>
@@ -1005,7 +1101,7 @@ real_T
 </tr>
 <tr class="odd">
 <td width="42%" align="left" valign="top">
-<a href="matlab:coder.internal.code2model('ACCSystem:329')" name="code2model" class="code2model">&lt;S2&gt;/Constant</a>
+<a href="matlab:coder.internal.code2model('ACCSystem:329')" name="code2model" class="code2model">&lt;S3&gt;/Constant</a>
 </td>
 <td width="26%" align="left" valign="top">
 <i>
@@ -1023,7 +1119,7 @@ real_T
 </tr>
 <tr class="even">
 <td width="42%" align="left" valign="top">
-<a href="matlab:coder.internal.code2model('ACCSystem:293')" name="code2model" class="code2model">&lt;S3&gt;/Delay</a>
+<a href="matlab:coder.internal.code2model('ACCSystem:293')" name="code2model" class="code2model">&lt;S4&gt;/Delay</a>
 </td>
 <td width="26%" align="left" valign="top">
 <i>
@@ -1041,7 +1137,7 @@ real_T
 </tr>
 <tr class="odd">
 <td width="42%" align="left" valign="top">
-<a href="matlab:coder.internal.code2model('ACCSystem:294')" name="code2model" class="code2model">&lt;S3&gt;/Delay1</a>
+<a href="matlab:coder.internal.code2model('ACCSystem:294')" name="code2model" class="code2model">&lt;S4&gt;/Delay1</a>
 </td>
 <td width="26%" align="left" valign="top">
 <i>
@@ -1059,7 +1155,7 @@ real_T
 </tr>
 <tr class="even">
 <td width="42%" align="left" valign="top">
-<a href="matlab:coder.internal.code2model('ACCSystem:295')" name="code2model" class="code2model">&lt;S3&gt;/Delay2</a>
+<a href="matlab:coder.internal.code2model('ACCSystem:295')" name="code2model" class="code2model">&lt;S4&gt;/Delay2</a>
 </td>
 <td width="26%" align="left" valign="top">
 <i>
@@ -1077,7 +1173,7 @@ real_T
 </tr>
 <tr class="odd">
 <td width="42%" align="left" valign="top">
-<a href="matlab:coder.internal.code2model('ACCSystem:296')" name="code2model" class="code2model">&lt;S3&gt;/Delay3</a>
+<a href="matlab:coder.internal.code2model('ACCSystem:296')" name="code2model" class="code2model">&lt;S4&gt;/Delay3</a>
 </td>
 <td width="26%" align="left" valign="top">
 <i>
@@ -1095,7 +1191,7 @@ real_T
 </tr>
 <tr class="even">
 <td width="42%" align="left" valign="top">
-<a href="matlab:coder.internal.code2model('ACCSystem:292')" name="code2model" class="code2model">&lt;S3&gt;/Constant</a>
+<a href="matlab:coder.internal.code2model('ACCSystem:292')" name="code2model" class="code2model">&lt;S4&gt;/Constant</a>
 </td>
 <td width="26%" align="left" valign="top">
 <i>
@@ -1113,7 +1209,79 @@ real_T
 </tr>
 <tr class="odd">
 <td width="42%" align="left" valign="top">
-<a href="matlab:coder.internal.code2model('ACCSystem:280')" name="code2model" class="code2model">&lt;S4&gt;/Delay</a>
+<a href="matlab:coder.internal.code2model('ACCSystem:460')" name="code2model" class="code2model">&lt;S5&gt;/Constant1</a>
+</td>
+<td width="26%" align="left" valign="top">
+<i>
+Defined externally
+</i>
+
+</td>
+<td width="21%" align="left" valign="top">
+real_T
+</td>
+<td width="10%" align="right" valign="top">
+1
+</td>
+
+</tr>
+<tr class="even">
+<td width="42%" align="left" valign="top">
+<a href="matlab:coder.internal.code2model('ACCSystem:451')" name="code2model" class="code2model">&lt;S5&gt;/Constant</a>
+</td>
+<td width="26%" align="left" valign="top">
+<i>
+Defined externally
+</i>
+
+</td>
+<td width="21%" align="left" valign="top">
+real_T
+</td>
+<td width="10%" align="right" valign="top">
+1
+</td>
+
+</tr>
+<tr class="odd">
+<td width="42%" align="left" valign="top">
+<a href="matlab:coder.internal.code2model('ACCSystem:467')" name="code2model" class="code2model">&lt;S5&gt;/Constant3</a>
+</td>
+<td width="26%" align="left" valign="top">
+<i>
+Defined externally
+</i>
+
+</td>
+<td width="21%" align="left" valign="top">
+real_T
+</td>
+<td width="10%" align="right" valign="top">
+1
+</td>
+
+</tr>
+<tr class="even">
+<td width="42%" align="left" valign="top">
+<a href="matlab:coder.internal.code2model('ACCSystem:466')" name="code2model" class="code2model">&lt;S5&gt;/Constant2</a>
+</td>
+<td width="26%" align="left" valign="top">
+<i>
+Defined externally
+</i>
+
+</td>
+<td width="21%" align="left" valign="top">
+real_T
+</td>
+<td width="10%" align="right" valign="top">
+1
+</td>
+
+</tr>
+<tr class="odd">
+<td width="42%" align="left" valign="top">
+<a href="matlab:coder.internal.code2model('ACCSystem:280')" name="code2model" class="code2model">&lt;S6&gt;/Delay</a>
 </td>
 <td width="26%" align="left" valign="top">
 <i>
@@ -1131,7 +1299,7 @@ uint32_T
 </tr>
 <tr class="even">
 <td width="42%" align="left" valign="top">
-<a href="matlab:coder.internal.code2model('ACCSystem:281')" name="code2model" class="code2model">&lt;S4&gt;/Delay1</a>
+<a href="matlab:coder.internal.code2model('ACCSystem:281')" name="code2model" class="code2model">&lt;S6&gt;/Delay1</a>
 </td>
 <td width="26%" align="left" valign="top">
 <i>
@@ -1149,7 +1317,7 @@ uint32_T
 </tr>
 <tr class="odd">
 <td width="42%" align="left" valign="top">
-<a href="matlab:coder.internal.code2model('ACCSystem:282')" name="code2model" class="code2model">&lt;S4&gt;/Delay2</a>
+<a href="matlab:coder.internal.code2model('ACCSystem:282')" name="code2model" class="code2model">&lt;S6&gt;/Delay2</a>
 </td>
 <td width="26%" align="left" valign="top">
 <i>
@@ -1167,7 +1335,7 @@ uint32_T
 </tr>
 <tr class="even">
 <td width="42%" align="left" valign="top">
-<a href="matlab:coder.internal.code2model('ACCSystem:283')" name="code2model" class="code2model">&lt;S4&gt;/Delay3</a>
+<a href="matlab:coder.internal.code2model('ACCSystem:283')" name="code2model" class="code2model">&lt;S6&gt;/Delay3</a>
 </td>
 <td width="26%" align="left" valign="top">
 <i>
@@ -1185,7 +1353,7 @@ uint32_T
 </tr>
 <tr class="odd">
 <td width="42%" align="left" valign="top">
-<a href="matlab:coder.internal.code2model('ACCSystem:293')" name="code2model" class="code2model">&lt;S3&gt;/Delay</a>
+<a href="matlab:coder.internal.code2model('ACCSystem:293')" name="code2model" class="code2model">&lt;S4&gt;/Delay</a>
 </td>
 <td width="26%" align="left" valign="top">
 <i>
@@ -1203,7 +1371,7 @@ uint32_T
 </tr>
 <tr class="even">
 <td width="42%" align="left" valign="top">
-<a href="matlab:coder.internal.code2model('ACCSystem:294')" name="code2model" class="code2model">&lt;S3&gt;/Delay1</a>
+<a href="matlab:coder.internal.code2model('ACCSystem:294')" name="code2model" class="code2model">&lt;S4&gt;/Delay1</a>
 </td>
 <td width="26%" align="left" valign="top">
 <i>
@@ -1221,7 +1389,7 @@ uint32_T
 </tr>
 <tr class="odd">
 <td width="42%" align="left" valign="top">
-<a href="matlab:coder.internal.code2model('ACCSystem:295')" name="code2model" class="code2model">&lt;S3&gt;/Delay2</a>
+<a href="matlab:coder.internal.code2model('ACCSystem:295')" name="code2model" class="code2model">&lt;S4&gt;/Delay2</a>
 </td>
 <td width="26%" align="left" valign="top">
 <i>
@@ -1239,7 +1407,7 @@ uint32_T
 </tr>
 <tr class="even">
 <td width="42%" align="left" valign="top">
-<a href="matlab:coder.internal.code2model('ACCSystem:296')" name="code2model" class="code2model">&lt;S3&gt;/Delay3</a>
+<a href="matlab:coder.internal.code2model('ACCSystem:296')" name="code2model" class="code2model">&lt;S4&gt;/Delay3</a>
 </td>
 <td width="26%" align="left" valign="top">
 <i>
@@ -1249,6 +1417,114 @@ Defined externally
 </td>
 <td width="21%" align="left" valign="top">
 uint32_T
+</td>
+<td width="10%" align="right" valign="top">
+1
+</td>
+
+</tr>
+<tr class="odd">
+<td width="42%" align="left" valign="top">
+<a href="matlab:coder.internal.code2model('ACCSystem:494')" name="code2model" class="code2model">&lt;S8&gt;/Constant5</a>
+</td>
+<td width="26%" align="left" valign="top">
+<i>
+Defined externally
+</i>
+
+</td>
+<td width="21%" align="left" valign="top">
+uint8_T
+</td>
+<td width="10%" align="right" valign="top">
+1
+</td>
+
+</tr>
+<tr class="even">
+<td width="42%" align="left" valign="top">
+<a href="matlab:coder.internal.code2model('ACCSystem:493')" name="code2model" class="code2model">&lt;S8&gt;/Constant4</a>
+</td>
+<td width="26%" align="left" valign="top">
+<i>
+Defined externally
+</i>
+
+</td>
+<td width="21%" align="left" valign="top">
+uint8_T
+</td>
+<td width="10%" align="right" valign="top">
+1
+</td>
+
+</tr>
+<tr class="odd">
+<td width="42%" align="left" valign="top">
+<a href="matlab:coder.internal.code2model('ACCSystem:576')" name="code2model" class="code2model">&lt;S9&gt;/Constant5</a>
+</td>
+<td width="26%" align="left" valign="top">
+<i>
+Defined externally
+</i>
+
+</td>
+<td width="21%" align="left" valign="top">
+uint8_T
+</td>
+<td width="10%" align="right" valign="top">
+1
+</td>
+
+</tr>
+<tr class="even">
+<td width="42%" align="left" valign="top">
+<a href="matlab:coder.internal.code2model('ACCSystem:575')" name="code2model" class="code2model">&lt;S9&gt;/Constant4</a>
+</td>
+<td width="26%" align="left" valign="top">
+<i>
+Defined externally
+</i>
+
+</td>
+<td width="21%" align="left" valign="top">
+uint8_T
+</td>
+<td width="10%" align="right" valign="top">
+1
+</td>
+
+</tr>
+<tr class="odd">
+<td width="42%" align="left" valign="top">
+<a href="matlab:coder.internal.code2model('ACCSystem:584')" name="code2model" class="code2model">&lt;S10&gt;/Constant5</a>
+</td>
+<td width="26%" align="left" valign="top">
+<i>
+Defined externally
+</i>
+
+</td>
+<td width="21%" align="left" valign="top">
+uint8_T
+</td>
+<td width="10%" align="right" valign="top">
+1
+</td>
+
+</tr>
+<tr class="even">
+<td width="42%" align="left" valign="top">
+<a href="matlab:coder.internal.code2model('ACCSystem:583')" name="code2model" class="code2model">&lt;S10&gt;/Constant4</a>
+</td>
+<td width="26%" align="left" valign="top">
+<i>
+Defined externally
+</i>
+
+</td>
+<td width="21%" align="left" valign="top">
+uint8_T
 </td>
 <td width="10%" align="right" valign="top">
 1
