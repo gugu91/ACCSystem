@@ -150,6 +150,7 @@ static real_T ACC_Controller_Y_d;
 /* '<Root>/Led1' */
 static uint8_T ACC_Controller_Y_Led1;
 
+
 void flipEnSw(){
     if(flippedFlag == 0) {
         flippedFlag = 1;
@@ -200,15 +201,17 @@ void do_step()
     ACC_Controller_U_DistanceAlive = 1;
     distance_age = alive_t.read_ms();
     
-    if(distance_age > 180)
-        ACC_Controller_U_DistanceAlive = 0;
+    //if(distance_age > 500)
+        //ACC_Controller_U_DistanceAlive = 0;
     
+    /* Step the model */
     ACC_Controller_step(ACC_Controller_M, ACC_Controller_U_EnableSwitch,
                         ACC_Controller_U_PedalFlag, ACC_Controller_U_ResetSwitch,
                         ACC_Controller_U_Distance, ACC_Controller_U_Speed,
                         ACC_Controller_U_CANAlive, ACC_Controller_U_DistanceAlive,
                         &ACC_Controller_Y_Go, &ACC_Controller_Y_Stop,
                         &ACC_Controller_Y_d, &ACC_Controller_Y_Led1);
+    
     ACC_Controller_U_ResetSwitch = 0;
     led_red=1;
     led_green=1;
@@ -233,18 +236,21 @@ void read_distance_thread(void const *args)
     echo.fall( &stop );
     
     while (true) {
+        trigger = 0;
+        wait_us( 5 );
         trigger = 1;
         wait_us( 10 );
         trigger = 0;
         while( !ready );
         ready = 0;
+        if(distance < 2.0 || distance > 400.0)
+            pc.printf( "\n\rDistance: %f Go: %d Stop: %d age: %d\n\r", distance, ACC_Controller_Y_Go, ACC_Controller_Y_Stop, distance_age);
         Thread::wait(60);
     }
 }
 
 int main()
 {
-    /* Pack model data into RTM */
     /* Pack model data into RTM */
     ACC_Controller_M->ModelData.defaultParam = &ACC_Controller_P;
     ACC_Controller_M->ModelData.dwork = &ACC_Controller_DW;
@@ -275,10 +281,10 @@ int main()
     
     
     while (true) {
-        pc.printf( "\n\rDistance: %.3f Go: %d Stop: %d age: %d\n\r", ACC_Controller_U_Distance, ACC_Controller_Y_Go, ACC_Controller_Y_Stop, distance_age);
         
         Thread::wait(1000);
     }
     
     ACC_Controller_terminate(ACC_Controller_M);
 }
+

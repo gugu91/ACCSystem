@@ -1,0 +1,11 @@
+clear d;
+clear s;
+clear t;
+
+d = [2, 2.4, 24.6, 25.4, 400];
+d = ext10(d);
+
+s = [50*length(d)];
+s = ext10(s);
+
+t = [0:0.1:0.1*length(d)-0.1]';
