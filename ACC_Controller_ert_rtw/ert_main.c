@@ -1,118 +1,117 @@
-#include "mbed.h"
-#include "rtos.h"
+/*
+ * Academic License - for use in teaching, academic research, and meeting
+ * course requirements at degree granting institutions only.  Not for
+ * government, commercial, or other organizational use.
+ *
+ * File: ert_main.c
+ *
+ * Code generated for Simulink model 'ACC_Controller'.
+ *
+ * Model version                  : 1.37
+ * Simulink Coder version         : 8.8 (R2015a) 09-Feb-2015
+ * C/C++ source code generated on : Sun Jul 26 16:20:54 2015
+ *
+ * Target selection: ert.tlc
+ * Embedded hardware selection: ARM Compatible->ARM Cortex
+ * Code generation objectives: Unspecified
+ * Validation result: Not run
+ */
 
-extern "C" {
-#include "ACC_Controller.h"
+#include <stddef.h>
+#include <stdio.h>                     /* This ert_main.c example uses printf/fflush */
+#include "ACC_Controller.h"            /* Model's header file */
 #include "rtwtypes.h"
-}
-
-Ticker tick;
-Timeout flipper;
-Timer           t;
-Timer alive_t;
-uint8_T flippedFlag;
-DigitalOut led_red(LED_RED);
-DigitalOut led_green(LED_GREEN);
-DigitalOut led_blue(LED_BLUE);
-InterruptIn enableSwitch(SW2);
-InterruptIn pedalFlag(SW3);
-Serial      pc(USBTX, USBRX); // tx, rx
-DigitalOut      trigger(D2);
-InterruptIn     echo(D4);
-volatile char    ready;
-volatile float   distance;
-volatile int distance_age;
 
 static RT_MODEL_ACC_Controller_T ACC_Controller_M_;
 static RT_MODEL_ACC_Controller_T *const ACC_Controller_M = &ACC_Controller_M_;/* Real-time model */
 static P_ACC_Controller_T ACC_Controller_P = {
-    0.0,                                 /* Expression: 0
-                                          * Referenced by: '<S6>/Delay'
-                                          */
-    0.0,                                 /* Expression: 0
-                                          * Referenced by: '<S6>/Delay1'
-                                          */
-    0.0,                                 /* Expression: 0
-                                          * Referenced by: '<S6>/Delay2'
-                                          */
-    0.0,                                 /* Expression: 0
-                                          * Referenced by: '<S6>/Delay3'
-                                          */
-    5.0,                                 /* Expression: 5
-                                          * Referenced by: '<S6>/Constant'
-                                          */
-    10.0,                                /* Expression: 10
-                                          * Referenced by: '<S3>/Constant'
-                                          */
-    0.0,                                 /* Expression: 0
-                                          * Referenced by: '<S4>/Delay'
-                                          */
-    0.0,                                 /* Expression: 0
-                                          * Referenced by: '<S4>/Delay1'
-                                          */
-    0.0,                                 /* Expression: 0
-                                          * Referenced by: '<S4>/Delay2'
-                                          */
-    0.0,                                 /* Expression: 0
-                                          * Referenced by: '<S4>/Delay3'
-                                          */
-    5.0,                                 /* Expression: 5
-                                          * Referenced by: '<S4>/Constant'
-                                          */
-    160.0,                               /* Expression: 160
-                                          * Referenced by: '<S5>/Constant1'
-                                          */
-    0.0,                                 /* Expression: 0
-                                          * Referenced by: '<S5>/Constant'
-                                          */
-    400.0,                               /* Expression: 400
-                                          * Referenced by: '<S5>/Constant3'
-                                          */
-    2.0,                                 /* Expression: 2
-                                          * Referenced by: '<S5>/Constant2'
-                                          */
-    1U,                                  /* Computed Parameter: Delay_DelayLength
-                                          * Referenced by: '<S6>/Delay'
-                                          */
-    1U,                                  /* Computed Parameter: Delay1_DelayLength
-                                          * Referenced by: '<S6>/Delay1'
-                                          */
-    1U,                                  /* Computed Parameter: Delay2_DelayLength
-                                          * Referenced by: '<S6>/Delay2'
-                                          */
-    1U,                                  /* Computed Parameter: Delay3_DelayLength
-                                          * Referenced by: '<S6>/Delay3'
-                                          */
-    1U,                                  /* Computed Parameter: Delay_DelayLength_i
-                                          * Referenced by: '<S4>/Delay'
-                                          */
-    1U,                                  /* Computed Parameter: Delay1_DelayLength_p
-                                          * Referenced by: '<S4>/Delay1'
-                                          */
-    1U,                                  /* Computed Parameter: Delay2_DelayLength_b
-                                          * Referenced by: '<S4>/Delay2'
-                                          */
-    1U,                                  /* Computed Parameter: Delay3_DelayLength_h
-                                          * Referenced by: '<S4>/Delay3'
-                                          */
-    1U,                                  /* Computed Parameter: Constant5_Value
-                                          * Referenced by: '<S8>/Constant5'
-                                          */
-    0U,                                  /* Computed Parameter: Constant4_Value
-                                          * Referenced by: '<S8>/Constant4'
-                                          */
-    1U,                                  /* Computed Parameter: Constant5_Value_p
-                                          * Referenced by: '<S9>/Constant5'
-                                          */
-    0U,                                  /* Computed Parameter: Constant4_Value_d
-                                          * Referenced by: '<S9>/Constant4'
-                                          */
-    1U,                                  /* Computed Parameter: Constant5_Value_m
-                                          * Referenced by: '<S10>/Constant5'
-                                          */
-    0U                                   /* Computed Parameter: Constant4_Value_b
-                                          * Referenced by: '<S10>/Constant4'
-                                          */
+  0.0,                                 /* Expression: 0
+                                        * Referenced by: '<S5>/Delay'
+                                        */
+  0.0,                                 /* Expression: 0
+                                        * Referenced by: '<S5>/Delay1'
+                                        */
+  0.0,                                 /* Expression: 0
+                                        * Referenced by: '<S5>/Delay2'
+                                        */
+  0.0,                                 /* Expression: 0
+                                        * Referenced by: '<S5>/Delay3'
+                                        */
+  5.0,                                 /* Expression: 5
+                                        * Referenced by: '<S5>/Constant'
+                                        */
+  10.0,                                /* Expression: 10
+                                        * Referenced by: '<S2>/Constant'
+                                        */
+  4.0,                                 /* Expression: 4
+                                        * Referenced by: '<S2>/Constant1'
+                                        */
+  0.0,                                 /* Expression: 0
+                                        * Referenced by: '<S3>/Delay'
+                                        */
+  0.0,                                 /* Expression: 0
+                                        * Referenced by: '<S3>/Delay1'
+                                        */
+  0.0,                                 /* Expression: 0
+                                        * Referenced by: '<S3>/Delay2'
+                                        */
+  0.0,                                 /* Expression: 0
+                                        * Referenced by: '<S3>/Delay3'
+                                        */
+  5.0,                                 /* Expression: 5
+                                        * Referenced by: '<S3>/Constant'
+                                        */
+  195.0,                               /* Expression: 195
+                                        * Referenced by: '<S8>/Constant1'
+                                        */
+  0.0,                                 /* Expression: 0
+                                        * Referenced by: '<S8>/Constant'
+                                        */
+  400.0,                               /* Expression: 400
+                                        * Referenced by: '<S8>/Constant3'
+                                        */
+  2.0,                                 /* Expression: 2
+                                        * Referenced by: '<S8>/Constant2'
+                                        */
+  1U,                                  /* Computed Parameter: Delay_DelayLength
+                                        * Referenced by: '<S5>/Delay'
+                                        */
+  1U,                                  /* Computed Parameter: Delay1_DelayLength
+                                        * Referenced by: '<S5>/Delay1'
+                                        */
+  1U,                                  /* Computed Parameter: Delay2_DelayLength
+                                        * Referenced by: '<S5>/Delay2'
+                                        */
+  1U,                                  /* Computed Parameter: Delay3_DelayLength
+                                        * Referenced by: '<S5>/Delay3'
+                                        */
+  1U,                                  /* Computed Parameter: Delay_DelayLength_i
+                                        * Referenced by: '<S3>/Delay'
+                                        */
+  1U,                                  /* Computed Parameter: Delay1_DelayLength_p
+                                        * Referenced by: '<S3>/Delay1'
+                                        */
+  1U,                                  /* Computed Parameter: Delay2_DelayLength_b
+                                        * Referenced by: '<S3>/Delay2'
+                                        */
+  1U,                                  /* Computed Parameter: Delay3_DelayLength_h
+                                        * Referenced by: '<S3>/Delay3'
+                                        */
+  1U,                                  /* Computed Parameter: Constant5_Value
+                                        * Referenced by: '<S10>/Constant5'
+                                        */
+  0U,                                  /* Computed Parameter: Constant4_Value
+                                        * Referenced by: '<S10>/Constant4'
+                                        */
+  2U,                                  /* Computed Parameter: Constant1_Value_p
+                                        * Referenced by: '<S10>/Constant1'
+                                        */
+  1U,                                  /* Computed Parameter: Constant5_Value_p
+                                        * Referenced by: '<S9>/Constant5'
+                                        */
+  0U                                   /* Computed Parameter: Constant4_Value_d
+                                        * Referenced by: '<S9>/Constant4'
+                                        */
 };                                     /* Modifiable parameters */
 
 static DW_ACC_Controller_T ACC_Controller_DW;/* Observable states */
@@ -122,9 +121,6 @@ static uint8_T ACC_Controller_U_EnableSwitch;
 
 /* '<Root>/PedalFlag' */
 static uint8_T ACC_Controller_U_PedalFlag;
-
-/* '<Root>/ResetSwitch' */
-static uint8_T ACC_Controller_U_ResetSwitch;
 
 /* '<Root>/Distance' */
 static real_T ACC_Controller_U_Distance;
@@ -144,147 +140,102 @@ static uint8_T ACC_Controller_Y_Go;
 /* '<Root>/Stop' */
 static uint8_T ACC_Controller_Y_Stop;
 
-/* '<Root>/d' */
-static real_T ACC_Controller_Y_d;
-
 /* '<Root>/Led1' */
 static uint8_T ACC_Controller_Y_Led1;
 
-
-void flipEnSw(){
-    if(flippedFlag == 0) {
-        flippedFlag = 1;
-        ACC_Controller_U_EnableSwitch = !ACC_Controller_U_EnableSwitch;
-    }
-}
-
-void downEnSw(){
-    ACC_Controller_U_ResetSwitch = 0;
-    flippedFlag=0;
-    flipper.attach(&flipEnSw, 1);
-}
-
-void upEnSw(){
-    if(flippedFlag == 0) {
-        flippedFlag = 1;
-        ACC_Controller_U_ResetSwitch = 1;
-    }
-}
-
-void downPedal(){
-    ACC_Controller_U_PedalFlag = 1;
-}
-
-void upPedal(){
-    ACC_Controller_U_PedalFlag = 0;
-}
-
-void start( void )
+/*
+ * Associating rt_OneStep with a real-time clock or interrupt service routine
+ * is what makes the generated code "real-time".  The function rt_OneStep is
+ * always associated with the base rate of the model.  Subrates are managed
+ * by the base rate from inside the generated code.  Enabling/disabling
+ * interrupts and floating point context switches are target specific.  This
+ * example code indicates where these should take place relative to executing
+ * the generated code step function.  Overrun behavior should be tailored to
+ * your application needs.  This example simply sets an error status in the
+ * real-time model and returns from rt_OneStep.
+ */
+void rt_OneStep(RT_MODEL_ACC_Controller_T *const ACC_Controller_M);
+void rt_OneStep(RT_MODEL_ACC_Controller_T *const ACC_Controller_M)
 {
-    ready = 0;
-    t.start();
+  static boolean_T OverrunFlag = false;
+
+  /* Disable interrupts here */
+
+  /* Check for overrun */
+  if (OverrunFlag) {
+    rtmSetErrorStatus(ACC_Controller_M, "Overrun");
+    return;
+  }
+
+  OverrunFlag = true;
+
+  /* Save FPU context here (if necessary) */
+  /* Re-enable timer or interrupt here */
+  /* Set model inputs here */
+
+  /* Step the model */
+  ACC_Controller_step(ACC_Controller_M, ACC_Controller_U_EnableSwitch,
+                      ACC_Controller_U_PedalFlag, ACC_Controller_U_Distance,
+                      ACC_Controller_U_Speed, ACC_Controller_U_CANAlive,
+                      ACC_Controller_U_DistanceAlive, &ACC_Controller_Y_Go,
+                      &ACC_Controller_Y_Stop, &ACC_Controller_Y_Led1);
+
+  /* Get model outputs here */
+
+  /* Indicate task complete */
+  OverrunFlag = false;
+
+  /* Disable interrupts here */
+  /* Restore FPU context here (if necessary) */
+  /* Enable interrupts here */
 }
 
-void stop( void )
+/*
+ * The example "main" function illustrates what is required by your
+ * application code to initialize, execute, and terminate the generated code.
+ * Attaching rt_OneStep to a real-time clock is target specific.  This example
+ * illustates how you do this relative to initializing the model.
+ */
+int_T main(int_T argc, const char *argv[])
 {
-    t.stop();
-    distance = t.read_us()/58.26;
-    ready = 1;
-    alive_t.reset();
-    alive_t.start();
-    t.reset();
+  /* Unused arguments */
+  (void)(argc);
+  (void)(argv);
+
+  /* Pack model data into RTM */
+  ACC_Controller_M->ModelData.defaultParam = &ACC_Controller_P;
+  ACC_Controller_M->ModelData.dwork = &ACC_Controller_DW;
+
+  /* Initialize model */
+  ACC_Controller_initialize(ACC_Controller_M, &ACC_Controller_U_EnableSwitch,
+    &ACC_Controller_U_PedalFlag, &ACC_Controller_U_Distance,
+    &ACC_Controller_U_Speed, &ACC_Controller_U_CANAlive,
+    &ACC_Controller_U_DistanceAlive, &ACC_Controller_Y_Go,
+    &ACC_Controller_Y_Stop, &ACC_Controller_Y_Led1);
+
+  /* Attach rt_OneStep to a timer or interrupt service routine with
+   * period 0.1 seconds (the model's base sample time) here.  The
+   * call syntax for rt_OneStep is
+   *
+   *  rt_OneStep(ACC_Controller_M);
+   */
+  printf("Warning: The simulation will run forever. "
+         "Generated ERT main won't simulate model step behavior. "
+         "To change this behavior select the 'MAT-file logging' option.\n");
+  fflush((NULL));
+  while (rtmGetErrorStatus(ACC_Controller_M) == (NULL)) {
+    /*  Perform other application tasks here */
+  }
+
+  /* Disable rt_OneStep() here */
+
+  /* Terminate model */
+  ACC_Controller_terminate(ACC_Controller_M);
+  return 0;
 }
 
-void do_step()
-{
-    ACC_Controller_U_Distance = distance;
-    ACC_Controller_U_DistanceAlive = 1;
-    distance_age = alive_t.read_ms();
-    
-    //if(distance_age > 500)
-        //ACC_Controller_U_DistanceAlive = 0;
-    
-    /* Step the model */
-    ACC_Controller_step(ACC_Controller_M, ACC_Controller_U_EnableSwitch,
-                        ACC_Controller_U_PedalFlag, ACC_Controller_U_ResetSwitch,
-                        ACC_Controller_U_Distance, ACC_Controller_U_Speed,
-                        ACC_Controller_U_CANAlive, ACC_Controller_U_DistanceAlive,
-                        &ACC_Controller_Y_Go, &ACC_Controller_Y_Stop,
-                        &ACC_Controller_Y_d, &ACC_Controller_Y_Led1);
-    
-    ACC_Controller_U_ResetSwitch = 0;
-    led_red=1;
-    led_green=1;
-    led_blue = 1;
-    if(ACC_Controller_Y_Led1 == 1) {
-        led_green = 0; //led pins are active low
-        if(ACC_Controller_Y_Stop == 1) led_red = 0;
-        if(ACC_Controller_Y_Go == 1) led_blue = 0;
-    }
-    if(ACC_Controller_Y_Led1 == 2) led_red = 0;
-}
-
-void read_distance_thread(void const *args)
-{
-    trigger = 0;
-    distance = 0;
-    ready = 0;
-    t.reset();
-    alive_t.reset();
-    
-    echo.rise( &start );
-    echo.fall( &stop );
-    
-    while (true) {
-        trigger = 0;
-        wait_us( 5 );
-        trigger = 1;
-        wait_us( 10 );
-        trigger = 0;
-        while( !ready );
-        ready = 0;
-        if(distance < 2.0 || distance > 400.0)
-            pc.printf( "\n\rDistance: %f Go: %d Stop: %d age: %d\n\r", distance, ACC_Controller_Y_Go, ACC_Controller_Y_Stop, distance_age);
-        Thread::wait(60);
-    }
-}
-
-int main()
-{
-    /* Pack model data into RTM */
-    ACC_Controller_M->ModelData.defaultParam = &ACC_Controller_P;
-    ACC_Controller_M->ModelData.dwork = &ACC_Controller_DW;
-    
-    /* Initialize model */
-    ACC_Controller_initialize(ACC_Controller_M, &ACC_Controller_U_EnableSwitch,
-                              &ACC_Controller_U_PedalFlag, &ACC_Controller_U_ResetSwitch,
-                              &ACC_Controller_U_Distance, &ACC_Controller_U_Speed,
-                              &ACC_Controller_U_CANAlive, &ACC_Controller_U_DistanceAlive,
-                              &ACC_Controller_Y_Go, &ACC_Controller_Y_Stop, &ACC_Controller_Y_d,
-                              &ACC_Controller_Y_Led1);
-    
-    ACC_Controller_U_PedalFlag = 0;
-    ACC_Controller_U_Distance = 0;
-    
-    ACC_Controller_U_Speed = 50;
-    ACC_Controller_U_CANAlive = 1;
-    ACC_Controller_U_DistanceAlive = 1;
-    
-    enableSwitch.fall(&downEnSw);
-    enableSwitch.rise(&upEnSw);
-    pedalFlag.fall(&downPedal);
-    pedalFlag.rise(&upPedal);
-    
-    Thread thread(read_distance_thread);
-    
-    tick.attach(&do_step, 0.1); // setup ticker to call flip every 0.1 seconds
-    
-    
-    while (true) {
-        
-        Thread::wait(1000);
-    }
-    
-    ACC_Controller_terminate(ACC_Controller_M);
-}
-
+/*
+ * File trailer for generated code.
+ *
+ * [EOF]
+ */
