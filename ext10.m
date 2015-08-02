@@ -1,7 +1,7 @@
-function [ s ] = ext10( s1 )
-s = ones(1, 100)';
-s = s*s1;
-s=reshape(s, [], 1);
+function [ out ] = ext10( in )
+out = ones(1, 100)';
+out = out*in;
+out=reshape(out, [], 1);
 
 end
 
